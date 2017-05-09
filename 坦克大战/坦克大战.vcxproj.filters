@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\数据库">
+      <UniqueIdentifier>{13cab12a-6e48-474f-848c-3111a71ddf0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类">
+      <UniqueIdentifier>{ab4d1441-97ca-441f-911f-32d5ffce4f47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\场景">
+      <UniqueIdentifier>{1be9d07e-7560-47be-bcd5-5af048576b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\数据库">
+      <UniqueIdentifier>{55662ebb-060e-4c91-8a8a-01c2193aef6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\场景\Solo">
+      <UniqueIdentifier>{300bd311-e2ee-4fc9-95bf-8fc5bc55e796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\场景\Designer">
+      <UniqueIdentifier>{3fd67818-46ef-41fc-8b83-9e86429ed0bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\Tank">
+      <UniqueIdentifier>{9df7bce6-5a6c-402f-a1f3-603ced23098e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\场景\GameScene">
+      <UniqueIdentifier>{06997a53-928e-4909-bccc-0cb99279237f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类">
+      <UniqueIdentifier>{a822971c-e2d2-46de-a158-96b3e635c474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\Map">
+      <UniqueIdentifier>{b6217d7f-6f07-4f23-aa0d-617befc32595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\Tank">
+      <UniqueIdentifier>{bdc03ae8-0ba9-44f5-b261-8df553360d02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\场景">
+      <UniqueIdentifier>{fce06d10-28ae-44a6-afea-ecfa536e5c80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\场景\Solo">
+      <UniqueIdentifier>{0da463a2-359b-4678-a6e3-6b14e04b4e85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\场景\Design">
+      <UniqueIdentifier>{e53d9804-3854-4f6b-8f90-13bc0d9bc841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\场景\GameScene">
+      <UniqueIdentifier>{f89c03fe-d489-42c9-878c-9c388a8850a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Loop">
+      <UniqueIdentifier>{76c64541-58fc-4587-9f15-02001e4dece0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Loop\Solo">
+      <UniqueIdentifier>{70f72384-aabd-41dc-bad3-7495c6dbac8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Loop\Designer">
+      <UniqueIdentifier>{71d15f4f-f921-4b48-bb75-b74a23231b84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Loop\Duet">
+      <UniqueIdentifier>{bd806b87-3aba-4376-9f3a-ed0e9e5e9c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\图片">
+      <UniqueIdentifier>{0662b7b0-2ab8-4113-bf98-978488b80c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\音乐">
+      <UniqueIdentifier>{a8e38bbf-7a41-4efb-9df5-0dbaebf9688e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Gamemain">
+      <UniqueIdentifier>{fb9cc9b4-e0bc-4531-9456-d14666215beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\自定义模板">
+      <UniqueIdentifier>{6057f3ae-4078-4a11-b78c-3dd3d63a2902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\类\自定义模板">
+      <UniqueIdentifier>{7350f107-0494-43ce-8bb0-7cfc9401779d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件\Gamemain</Filter>
+    </ClCompile>
+    <ClCompile Include="ADBConnector.cpp">
+      <Filter>源文件\数据库</Filter>
+    </ClCompile>
+    <ClCompile Include="AFormat.cpp">
+      <Filter>源文件\数据库</Filter>
+    </ClCompile>
+    <ClCompile Include="Music.cpp">
+      <Filter>源文件\类\音乐</Filter>
+    </ClCompile>
+    <ClCompile Include="Picture.cpp">
+      <Filter>源文件\类\图片</Filter>
+    </ClCompile>
+    <ClCompile Include="mainScene.cpp">
+      <Filter>源文件\类\场景</Filter>
+    </ClCompile>
+    <ClCompile Include="soloScene.cpp">
+      <Filter>源文件\类\场景\Solo</Filter>
+    </ClCompile>
+    <ClCompile Include="rand.cpp">
+      <Filter>源文件\Gamemain</Filter>
+    </ClCompile>
+    <ClCompile Include="movie.cpp">
+      <Filter>源文件\Gamemain</Filter>
+    </ClCompile>
+    <ClCompile Include="mainloop.cpp">
+      <Filter>源文件\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="sololoop.cpp">
+      <Filter>源文件\Loop\Solo</Filter>
+    </ClCompile>
+    <ClCompile Include="designPVEloop.cpp">
+      <Filter>源文件\Loop\Designer</Filter>
+    </ClCompile>
+    <ClCompile Include="designloop.cpp">
+      <Filter>源文件\Loop\Designer</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>源文件\类\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="designer_PVE.cpp">
+      <Filter>源文件\类\场景\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="isoverloop.cpp">
+      <Filter>源文件\Loop\Designer</Filter>
+    </ClCompile>
+    <ClCompile Include="isover_design.cpp">
+      <Filter>源文件\类\场景\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="designScene.cpp">
+      <Filter>源文件\类\场景\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="designer_PVP.cpp">
+      <Filter>源文件\类\场景\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="designPVPloop.cpp">
+      <Filter>源文件\Loop\Designer</Filter>
+    </ClCompile>
+    <ClCompile Include="duetloop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="soloGameloop.cpp">
+      <Filter>源文件\Loop\Solo</Filter>
+    </ClCompile>
+    <ClCompile Include="gameScene_PVE.cpp">
+      <Filter>源文件\类\场景\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="tank.cpp">
+      <Filter>源文件\类\Tank</Filter>
+    </ClCompile>
+    <ClCompile Include="tank_player.cpp">
+      <Filter>源文件\类\Tank</Filter>
+    </ClCompile>
+    <ClCompile Include="bulltes.cpp">
+      <Filter>源文件\类\Tank</Filter>
+    </ClCompile>
+    <ClCompile Include="myQueue.cpp">
+      <Filter>源文件\类\自定义模板</Filter>
+    </ClCompile>
+    <ClCompile Include="escScene.cpp">
+      <Filter>源文件\类\场景\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Escloop.cpp">
+      <Filter>源文件\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="Selectlevelloop.cpp">
+      <Filter>源文件\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="PVEselectlevelScene.cpp">
+      <Filter>源文件\类\场景</Filter>
+    </ClCompile>
+    <ClCompile Include="tanke_enemy.cpp">
+      <Filter>源文件\类\Tank</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="functions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>头文件\类</Filter>
+    </ClInclude>
+    <ClInclude Include="Picture.h">
+      <Filter>头文件\类</Filter>
+    </ClInclude>
+    <ClInclude Include="mainScene.h">
+      <Filter>头文件\类\场景</Filter>
+    </ClInclude>
+    <ClInclude Include="ADBConnector.h">
+      <Filter>头文件\数据库</Filter>
+    </ClInclude>
+    <ClInclude Include="soloScene.h">
+      <Filter>头文件\类\场景\Solo</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>头文件\类</Filter>
+    </ClInclude>
+    <ClInclude Include="designer_PVE.h">
+      <Filter>头文件\类\场景\Designer</Filter>
+    </ClInclude>
+    <ClInclude Include="isover_design.h">
+      <Filter>头文件\类\场景\Designer</Filter>
+    </ClInclude>
+    <ClInclude Include="designScene.h">
+      <Filter>头文件\类\场景\Designer</Filter>
+    </ClInclude>
+    <ClInclude Include="designer_PVP.h">
+      <Filter>头文件\类\场景\Designer</Filter>
+    </ClInclude>
+    <ClInclude Include="gameScene_PVE.h">
+      <Filter>头文件\类\场景\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="tank.h">
+      <Filter>头文件\类\Tank</Filter>
+    </ClInclude>
+    <ClInclude Include="tank_player.h">
+      <Filter>头文件\类\Tank</Filter>
+    </ClInclude>
+    <ClInclude Include="bulltes.h">
+      <Filter>头文件\类\Tank</Filter>
+    </ClInclude>
+    <ClInclude Include="myQueue.h">
+      <Filter>头文件\类\自定义模板</Filter>
+    </ClInclude>
+    <ClInclude Include="escScene.h">
+      <Filter>头文件\类\场景\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="tanke_enemy.h">
+      <Filter>头文件\类\Tank</Filter>
+    </ClInclude>
+    <ClInclude Include="PVEselectlevelScene.h">
+      <Filter>头文件\类\场景</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
