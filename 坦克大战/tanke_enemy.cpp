@@ -12,6 +12,8 @@ tanke_enemy::tanke_enemy(myQueue& bornQueue, map& map, int(*tankmap)[26])
 	direct = Down;
 	count = 0;
 
+	ai_bullte_count = 60;
+
 	update_speed();
 
 	while (true)
@@ -38,13 +40,16 @@ tanke_enemy::~tanke_enemy()
 {
 }
 
-void tanke_enemy::update(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void tanke_enemy::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
+	AI_bullte();
+
 	update_speed();
 	update_xy();
+
 	if (!bullte.Canfire())
 	{
-		bullte.update(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+		bullte.update(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 	}
 }
 
@@ -221,4 +226,24 @@ void tanke_enemy::update_speed()
 		speed = 2;
 	else
 		speed = 4;
+}
+
+void tanke_enemy::AI_bullte()
+{
+	if (ai_bullte_count)
+		ai_bullte_count--;
+
+	if (bullte.Canfire() && ai_bullte_count == 0)
+	{
+		if (myrand_int(0, 100) > 30)
+		{
+			if (level < 2)
+				bullte.init(0, aimx, aimy, direct, 2 * speed);
+			else
+				bullte.init(0, aimx, aimy, direct, 5);
+		}
+
+		ai_bullte_count = 200;
+	}
+
 }

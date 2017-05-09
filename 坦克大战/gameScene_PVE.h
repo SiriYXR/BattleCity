@@ -19,6 +19,7 @@ public:
 private:
 	void update_enemyborn();
 	void update_tankmap();
+	void update_bulltemap();
 	void update_state();
 
 	void onKey_J(key_msg key);
@@ -41,6 +42,7 @@ private:
 	void init();
 	void initgame();
 	void inittankmap();
+	void initbulltemap();
 
 	void delete_enemy();
 
@@ -63,6 +65,7 @@ private:
 	bool isover;
 	
 	int tankmap[26][26];
+	int bulltemap[26][26];
 	int level;
 	int playerlife;
 	int score;

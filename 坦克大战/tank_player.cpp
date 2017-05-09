@@ -8,6 +8,7 @@ void tank_player::init_tank_player(myQueue& bornQueue, map& map, direction direc
 	y = map_y + aimy * 20;
 	count = 0;
 	speed = 2;
+	level=1;
 
 	bornQueue.push(x, y);
 	this->direct = direct;
@@ -23,6 +24,7 @@ void tank_player::init_tank_player(myQueue& bornQueue, map& map, bool isfalse, d
 	y = map_y + aimy * 20;
 	count = 0;
 	speed = 2;
+	level = 1;
 
 	bornQueue.push(x, y);
 	this->direct = direct;
@@ -44,12 +46,12 @@ tank_player::~tank_player()
 {
 }
 
-void tank_player::update(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void tank_player::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	update_xy();
 	if (!bullte.Canfire())
 	{
-		bullte.update(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+		bullte.update(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 	}
 }
 

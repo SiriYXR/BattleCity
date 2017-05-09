@@ -16,6 +16,7 @@ gameScene_PVE::gameScene_PVE()
 	count_pass = 0;
 
 	inittankmap();
+	initbulltemap();
 
 	auto result = DB.query("select * from battle_city where mainKey=1");
 	result.next();
@@ -40,6 +41,7 @@ gameScene_PVE::gameScene_PVE(int level)
 	count_pass = 0;
 
 	inittankmap();
+	initbulltemap();
 
 	auto result = DB.query("select * from battle_city where mainKey=1");
 	result.next();
@@ -59,6 +61,7 @@ void gameScene_PVE::init()
 	count_pass = 0;
 
 	inittankmap();
+	initbulltemap();
 
 	auto result = DB.query("select * from battle_city where mainKey=1");
 	result.next();
@@ -81,6 +84,13 @@ void gameScene_PVE::inittankmap()
 	for (int i = 0; i < 26; i++)
 		for (int j = 0; j < 26; j++)
 			tankmap[i][j] = 0;
+}
+
+void gameScene_PVE::initbulltemap()
+{
+	for (int i = 0; i < 26; i++)
+		for (int j = 0; j < 26; j++)
+			bulltemap[i][j] = 0;
 }
 
 void gameScene_PVE::delete_enemy()
@@ -109,15 +119,18 @@ void gameScene_PVE::update()
 	if (state == gaming)
 	{
 		update_tankmap();
-		playertank.update(map, tankmap, playertank,enemyQueue,deadenemyQueue, bombQueue, state,playerlife,enemynum,score);
+		update_bulltemap();
+		playertank.update(map, tankmap,bulltemap, playertank,enemyQueue,deadenemyQueue, bombQueue,bornQueue, state,playerlife,enemynum,score);
 		update_tankmap();
+		update_bulltemap();
 		update_enemyborn();
 
 		int n = enemyQueue.size();
 		while (n--)
 		{
 			update_tankmap();
-			enemyQueue.front()->update(map, tankmap, playertank, enemyQueue,deadenemyQueue, bombQueue, state, playerlife,enemynum, score);
+			update_bulltemap();
+			enemyQueue.front()->update(map, tankmap, bulltemap, playertank,enemyQueue,deadenemyQueue, bombQueue,bornQueue, state,playerlife,enemynum,score);
 			enemyQueue.push(enemyQueue.front());
 			enemyQueue.pop();
 		}
@@ -319,6 +332,9 @@ void gameScene_PVE::update_tankmap()
 {
 	inittankmap();
 	tankmap[playertank.aimx][playertank.aimy] = 1;
+	tankmap[playertank.aimx+1][playertank.aimy] = 1;
+	tankmap[playertank.aimx][playertank.aimy+1] = 1;
+	tankmap[playertank.aimx+1][playertank.aimy+1] = 1;
 	int n = enemyQueue.size();
 	while (n--)
 	{
@@ -326,6 +342,21 @@ void gameScene_PVE::update_tankmap()
 		tankmap[enemyQueue.front()->aimx + 1][enemyQueue.front()->aimy] = 1;
 		tankmap[enemyQueue.front()->aimx][enemyQueue.front()->aimy + 1] = 1;
 		tankmap[enemyQueue.front()->aimx + 1][enemyQueue.front()->aimy + 1] = 1;
+		enemyQueue.push(enemyQueue.front());
+		enemyQueue.pop();
+	}
+}
+
+void gameScene_PVE::update_bulltemap()
+{
+	initbulltemap();
+	if(playertank.bullte.bullet)
+	bulltemap[playertank.bullte.aimx][playertank.bullte.aimy] = 1;
+	int n = enemyQueue.size();
+	while (n--)
+	{
+		if (enemyQueue.front()->bullte.bullet)
+		bulltemap[enemyQueue.front()->bullte.aimx][enemyQueue.front()->bullte.aimy] = 1;
 		enemyQueue.push(enemyQueue.front());
 		enemyQueue.pop();
 	}

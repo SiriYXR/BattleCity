@@ -14,9 +14,9 @@ bulltes::~bulltes()
 {
 }
 
-void bulltes::update(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
-	update_move(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+	update_move(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 	update_xy();
 }
 
@@ -75,7 +75,7 @@ void bulltes::init(int isplayer, int aimx, int aimy, direction direct, int speed
 	music.mu_Switch();
 }
 
-void bulltes::BulletHit(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::BulletHit(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	switch (direct)
 	{
@@ -148,7 +148,7 @@ void bulltes::BulletHit(map & map, int(*tankmap)[26], tank_player& palyer_tank, 
 	}
 }
 
-void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	switch (direct)
 	{
@@ -191,6 +191,23 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], tank_player& palyer_ta
 					{
 						enemyQueue.push(enemyQueue.front());
 						enemyQueue.pop();
+					}
+				}
+			}
+			else
+			{
+				if ((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy))
+				{
+					if (player_tank.level == 2)
+					{
+						player_tank.level--;
+						music.mu_Hit_Tank();
+					}
+					else
+					{
+						player_tank.init_tank_player(bornQueue, map);
+						playerlife--;
+						music.mu_Dead_Player();
 					}
 				}
 			}
@@ -238,6 +255,122 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], tank_player& palyer_ta
 					}
 				}
 			}
+			else
+			{
+				if ((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy))
+				{
+					if (player_tank.level == 2)
+					{
+						player_tank.level--;
+						music.mu_Hit_Tank();
+					}
+					else
+					{
+						player_tank.init_tank_player(bornQueue, map);
+						playerlife--;
+						music.mu_Dead_Player();
+					}
+				}
+			}
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void bulltes::BulletHit_bullte(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player & player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
+{
+	switch (direct)
+	{
+	case Up:
+	case Down:
+		if (bulltemap[aimx][aimy] == 1 || bulltemap[aimx + 1][aimy] == 1)
+		{
+			if (isplayer)
+			{
+				int n = enemyQueue.size();
+				while (n--)
+				{
+					if ((enemyQueue.front()->bullte.aimx == aimx&&enemyQueue.front()->bullte.aimy == aimy) || (enemyQueue.front()->bullte.aimx + 1 == aimx&&enemyQueue.front()->bullte.aimy == aimy))
+					{
+						enemyQueue.front()->bullte.bullet = false;
+					}
+					else
+					{
+						enemyQueue.push(enemyQueue.front());
+						enemyQueue.pop();
+					}
+				}
+			}
+			else
+			{
+				int n = enemyQueue.size() - 1;
+				enemyQueue.push(enemyQueue.front());
+				enemyQueue.pop();
+				while (n--)
+				{
+					if ((enemyQueue.front()->bullte.aimx == aimx&&enemyQueue.front()->bullte.aimy == aimy) || (enemyQueue.front()->bullte.aimx + 1 == aimx&&enemyQueue.front()->bullte.aimy == aimy))
+					{
+						enemyQueue.front()->bullte.bullet = false;
+					}
+					else
+					{
+						enemyQueue.push(enemyQueue.front());
+						enemyQueue.pop();
+					}
+				}
+
+				if ((player_tank.bullte.aimx == aimx&&player_tank.bullte.aimy == aimy) || (player_tank.bullte.aimx + 1 == aimx&&player_tank.bullte.aimy == aimy))
+				{
+					player_tank.bullte.bullet = false;
+				}
+			}
+		}
+		break;
+	case Left:
+	case Right:
+		if (bulltemap[aimx][aimy] == 1 || bulltemap[aimx][aimy + 1] == 1)
+		{
+			if (isplayer)
+			{
+				int n = enemyQueue.size();
+				while (n--)
+				{
+					if ((enemyQueue.front()->bullte.aimx == aimx&&enemyQueue.front()->bullte.aimy == aimy) || (enemyQueue.front()->bullte.aimx == aimx&&enemyQueue.front()->bullte.aimy + 1 == aimy))
+					{
+						enemyQueue.front()->bullte.bullet = false;
+					}
+					else
+					{
+						enemyQueue.push(enemyQueue.front());
+						enemyQueue.pop();
+					}
+				}
+			}
+			else
+			{
+				int n = enemyQueue.size() - 1;
+				enemyQueue.push(enemyQueue.front());
+				enemyQueue.pop();
+				while (n--)
+				{
+					if ((enemyQueue.front()->bullte.aimx == aimx&&enemyQueue.front()->bullte.aimy == aimy) || (enemyQueue.front()->bullte.aimx == aimx&&enemyQueue.front()->bullte.aimy + 1 == aimy))
+					{
+						enemyQueue.front()->bullte.bullet = false;
+					}
+					else
+					{
+						enemyQueue.push(enemyQueue.front());
+						enemyQueue.pop();
+					}
+				}
+
+				if ((player_tank.bullte.aimx == aimx&&player_tank.bullte.aimy == aimy) || (player_tank.bullte.aimx == aimx&&player_tank.bullte.aimy + 1 == aimy))
+				{
+					player_tank.bullte.bullet = false;
+				}
+			}
 		}
 		break;
 	default:
@@ -251,7 +384,7 @@ bool bulltes::Canfire()
 }
 
 
-bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	if (bullet&&count == 0)
 	{
@@ -269,7 +402,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 				music.mu_Hit_Wall();
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 
 			}
@@ -277,17 +410,25 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				state = lose;
 				bullet = false;
 
 			}
+			if (bulltemap[aimx][aimy-1] == 1 || bulltemap[aimx + 1][aimy-1] == 1)
+			{
+				aimy--;
+				bombQueue.push(x - 10, y - 10);
+				BulletHit_bullte(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				bullet = false;
+			}
+
 
 
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -304,7 +445,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 				music.mu_Hit_Wall();
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 
 			}
@@ -312,16 +453,23 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				state = lose;
 				bullet = false;
 
+			}
+			if (bulltemap[aimx][aimy+1] == 1 || bulltemap[aimx + 1][aimy+1] == 1)
+			{
+				aimy++;
+				bombQueue.push(x - 10, y - 10);
+				BulletHit_bullte(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				bullet = false;
 			}
 
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -338,7 +486,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 				music.mu_Hit_Wall();
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 
 			}
@@ -346,16 +494,23 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				state = lose;
 				bullet = false;
 
+			}
+			if (bulltemap[aimx+1][aimy] == 1 || bulltemap[aimx+1][aimy + 1] == 1)
+			{
+				aimx++;
+				bombQueue.push(x - 10, y - 10);
+				BulletHit_bullte(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				bullet = false;
 			}
 
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -372,23 +527,30 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 			{
 				music.mu_Hit_Wall();
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 
 			}
 			if (map.getmember(1, aimx, aimy) == home || map.getmember(1, aimx, aimy + 1) == home || map.getmember(1, aimx, aimy) == home_h || map.getmember(1, aimx, aimy + 1) == home_h)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHit(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHit(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				state = lose;
 				bullet = false;
 
+			}
+			if (bulltemap[aimx-1][aimy] == 1 || bulltemap[aimx-1][aimy + 1] == 1)
+			{
+				aimx--;
+				bombQueue.push(x - 10, y - 10);
+				BulletHit_bullte(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				bullet = false;
 			}
 
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -406,9 +568,9 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], tank_player& palyer_tank, qu
 	return false;
 }
 
-void bulltes::update_move(map & map, int(*tankmap)[26], tank_player& palyer_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::update_move(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
-	if (bullet&&Canmove(map, tankmap, palyer_tank, enemyQueue, deadenemyQueue, bombQueue, state, playerlife, enemynum, score))
+	if (bullet&&Canmove(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score))
 		switch (direct)
 		{
 		case Up:
