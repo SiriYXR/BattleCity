@@ -267,6 +267,7 @@ void map::load_design()
 		fp = fopen("资源包\\maps\\custom\\custommap_PVE.dat", "rb");
 	else
 		fp = fopen("资源包\\maps\\custom\\custommap_PVP.dat", "rb");
+	fseek(fp, sizeof(*member)*(0), SEEK_SET);
 	fread(member, sizeof(*member), 1, fp);
 
 	fclose(fp);

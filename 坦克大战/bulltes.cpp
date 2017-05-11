@@ -215,7 +215,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 		break;
 	case Left:
 	case Right:
-		if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy - 1] == 1)
+		if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 		{
 			if (isplayer)
 			{
