@@ -158,7 +158,7 @@ Picture::Picture()
 Picture::~Picture()
 {
 	//»­²¼
-	//delimage(canvas);
+	delimage(canvas);
 
 	//±¬Õ¨
 	//----------------------------

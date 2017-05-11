@@ -23,11 +23,13 @@ gameScene_PVE::gameScene_PVE()
 	historyscore = atoi(result["score"].c_str());
 
 	playertank.init_tank_player(bornQueue, map);
+	delete_enemy();
 	music.mu_Start();
 }
 
 gameScene_PVE::gameScene_PVE(int level)
 {
+	
 	map.load_PVE(level);
 
 	this->level = level;
@@ -48,6 +50,7 @@ gameScene_PVE::gameScene_PVE(int level)
 	historyscore = atoi(result["score"].c_str());
 
 	playertank.init_tank_player(bornQueue, map);
+	delete_enemy();
 	music.mu_Start();
 }
 
@@ -76,7 +79,7 @@ void gameScene_PVE::init()
 void gameScene_PVE::initgame()
 {
 	init();
-	map.load_PVE(level);
+	map.load_PVE(this->level);
 }
 
 void gameScene_PVE::inittankmap()
@@ -142,12 +145,13 @@ void gameScene_PVE::update()
 	{
 		if (count_pass > 60)
 		{
-			level++;
+			
 			char buffer[255];
+			int maxlevel;
+
 			sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", level);
 			DB.query(buffer);
 
-			int maxlevel;
 			auto result = DB.query("select * from battle_city where mainKey=1");
 			result.next();
 			maxlevel = atoi(result["maxlevel"].c_str());
@@ -170,7 +174,10 @@ void gameScene_PVE::update()
 				if (ch == 27)
 					isover = true;
 				else
+				{
+					level++;
 					initgame();
+				}
 			}
 		}
 		count_pass++;
