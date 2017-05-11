@@ -161,7 +161,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 				int n = enemyQueue.size();
 				while (n--)
 				{
-					if (((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy)) || ((enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy)))
+					if (((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx && enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx && enemyQueue.front()->aimy + 1 == aimy)) || ((enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy)))
 					{
 						if (enemyQueue.front()->level > 1)
 						{
