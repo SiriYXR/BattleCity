@@ -19,6 +19,6 @@ public:
 	int aimx;
 	int aimy;
 	int count;
-	int speed;
+	float speed;
 };
 

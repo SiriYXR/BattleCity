@@ -159,11 +159,19 @@ void gameScene_PVE::update()
 			}
 
 			char ch;
-			ch = ege::getch();
-			if (ch == 27)
+			if (level > 20)
+			{
+				ege::getch();
 				isover = true;
+			}
 			else
-				initgame();
+			{
+				ch = ege::getch();
+				if (ch == 27)
+					isover = true;
+				else
+					initgame();
+			}
 		}
 		count_pass++;
 	}
@@ -198,7 +206,17 @@ void gameScene_PVE::render()
 		rend_pause();
 
 	if (state == pass)
-		rend_pass();
+	{
+		if (level == 20)
+		{
+			rend_through();
+		}
+		else
+		{
+			rend_pass();
+		}
+	}
+		
 
 	picture.rend();
 }
@@ -315,7 +333,7 @@ void gameScene_PVE::update_enemyborn()
 	static int count = 100;
 	if (enemynum>enemyQueue.size())
 	{
-		if (enemyQueue.size() < 5)
+		if (enemyQueue.size() < 4)
 		{
 			count++;
 			if (count > 100 && enemycanBorn())
@@ -417,17 +435,9 @@ void gameScene_PVE::rend_bomb()
 			bombQueue.pop();
 		else
 		{
-			//time_t start = clock();
 			movieBomb(bombQueue.front_count(), bombQueue.front_x(), bombQueue.front_y(),picture);
-			//time_t end1 = clock();
 			bombQueue.push(bombQueue.front_x(), bombQueue.front_y(), bombQueue.front_count() - 1);
-			//time_t end2 = clock();
 			bombQueue.pop();
-			/*time_t end3 = clock();
-			char buffer[100];
-			sprintf(buffer, "%d %d %d\n",end1-start,end2-end1,end3-end2);
-			OutputDebugStringA(buffer);*/
-
 		}
 	}
 }
@@ -526,6 +536,45 @@ void gameScene_PVE::rend_pause()
 	putimage_alphablend(NULL, blackbar, 0, 0, 200);
 	setfont(60, 0, "楷体");
 	outtextxy((Win_W - 360) / 2, (Win_H - 60) / 2, "按任P键继续");
+	delimage(blackbar);
+}
+
+void gameScene_PVE::rend_through()
+{
+	PIMAGE blackbar = newimage(Win_W, Win_H);
+	putimage_alphablend(NULL, blackbar, 0, 0, 200);
+
+	setbkmode(TRANSPARENT);
+	char str[20];
+	setcolor(WHITE);
+
+	setfont(60, 0, "楷体");
+	outtextxy((Win_W - 540) / 2,100, "恭喜你通过最后一关！");
+
+	if (score > historyscore)
+	{
+		setfont(50, 0, "楷体");
+		sprintf(str, "新纪录：%d", score);
+		outtextxy(230, 350, str);
+		char buffer[255];
+		sprintf(buffer, "update battle_city set score = ('%d') where mainKey = 1", score);
+		DB.query(buffer);
+	}
+	else
+	{
+		setfont(40, 0, "楷体");
+		sprintf(str, "历史最高分：%d", historyscore);
+		outtextxy(230, 300, str);
+		sprintf(str, "最终得分分：%d", score);
+		outtextxy(230, 400, str);
+	}
+
+	if (count_pass > 50)
+	{
+		setfont(40, 0, "楷体");
+		outtextxy((Win_W - 240) / 2, Win_H - 70, "按任意键退出");
+	}
+
 	delimage(blackbar);
 }
 

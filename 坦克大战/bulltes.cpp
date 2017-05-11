@@ -161,7 +161,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 				int n = enemyQueue.size();
 				while (n--)
 				{
-					if ((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy + 1 == aimy))
+					if (((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy)) || ((enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx + 1 && enemyQueue.front()->aimy + 1 == aimy)))
 					{
 						if (enemyQueue.front()->level > 1)
 						{
@@ -196,7 +196,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 			}
 			else
 			{
-				if ((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy))
+				if (((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy)) || ((player_tank.aimx == aimx + 1 && player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx + 1 && player_tank.aimy == aimy) || (player_tank.aimx == aimx + 1 && player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx + 1 && player_tank.aimy + 1 == aimy)))
 				{
 					if (player_tank.level == 2)
 					{
@@ -222,7 +222,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 				int n = enemyQueue.size();
 				while (n--)
 				{
-					if ((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy + 1 == aimy))
+					if (((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy) || (enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy + 1 == aimy) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy + 1 == aimy)) || ((enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy == aimy + 1) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy == aimy + 1) || (enemyQueue.front()->aimx == aimx&&enemyQueue.front()->aimy + 1 == aimy + 1) || (enemyQueue.front()->aimx + 1 == aimx&&enemyQueue.front()->aimy + 1 == aimy + 1)))
 					{
 						if (enemyQueue.front()->level > 1)
 						{
@@ -257,7 +257,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 			}
 			else
 			{
-				if ((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy))
+				if (((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy)) || ((player_tank.aimx == aimx&&player_tank.aimy == aimy + 1) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy + 1) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy + 1) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy + 1)))
 				{
 					if (player_tank.level == 2)
 					{
@@ -415,7 +415,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 				bullet = false;
 
 			}
-			if (bulltemap[aimx][aimy-1] == 1 || bulltemap[aimx + 1][aimy-1] == 1)
+			if (bulltemap[aimx][aimy - 1] == 1 || bulltemap[aimx + 1][aimy - 1] == 1)
 			{
 				aimy--;
 				bombQueue.push(x - 10, y - 10);
@@ -458,7 +458,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 				bullet = false;
 
 			}
-			if (bulltemap[aimx][aimy+1] == 1 || bulltemap[aimx + 1][aimy+1] == 1)
+			if (bulltemap[aimx][aimy + 1] == 1 || bulltemap[aimx + 1][aimy + 1] == 1)
 			{
 				aimy++;
 				bombQueue.push(x - 10, y - 10);
@@ -499,7 +499,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 				bullet = false;
 
 			}
-			if (bulltemap[aimx+1][aimy] == 1 || bulltemap[aimx+1][aimy + 1] == 1)
+			if (bulltemap[aimx + 1][aimy] == 1 || bulltemap[aimx + 1][aimy + 1] == 1)
 			{
 				aimx++;
 				bombQueue.push(x - 10, y - 10);
@@ -539,7 +539,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 				bullet = false;
 
 			}
-			if (bulltemap[aimx-1][aimy] == 1 || bulltemap[aimx-1][aimy + 1] == 1)
+			if (bulltemap[aimx - 1][aimy] == 1 || bulltemap[aimx - 1][aimy + 1] == 1)
 			{
 				aimx--;
 				bombQueue.push(x - 10, y - 10);

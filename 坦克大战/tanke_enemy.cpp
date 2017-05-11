@@ -13,6 +13,7 @@ tanke_enemy::tanke_enemy(myQueue& bornQueue, map& map, int(*tankmap)[26])
 	count = 0;
 
 	ai_bullte_count = 60;
+	ai_move_count = 0;
 
 	update_speed();
 
@@ -45,7 +46,9 @@ void tanke_enemy::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank
 	AI_bullte();
 
 	update_speed();
+	update_move(map, tankmap);
 	update_xy();
+	init_xy();
 
 	if (!bullte.Canfire())
 	{
@@ -220,12 +223,57 @@ void tanke_enemy::update_xy()
 
 void tanke_enemy::update_speed()
 {
-	if (level == 1)
+	if (level < 3)
 		speed = 1;
-	else if (level == 2)
-		speed = 2;
 	else
-		speed = 4;
+		speed = 2;
+}
+
+void tanke_enemy::update_move(map & map, int(*tankmap)[26])
+{
+	AI_direct(map, tankmap);
+	AI_move();
+
+	if (count == 0 && ai_move_count)
+	{
+		switch (direct)
+		{
+		case Up:
+			if (canmove(map, tankmap))
+			{
+				aimy--;
+				update_count();
+			}
+			break;
+		case Down:
+			if (canmove(map, tankmap))
+			{
+				aimy++;
+				update_count();
+			}
+			break;
+		case Right:
+			if (canmove(map, tankmap))
+			{
+				aimx++;
+				update_count();
+			}
+			break;
+		case Left:
+			if (canmove(map, tankmap))
+			{
+				aimx--;
+				update_count();
+			}
+			break;
+		}
+		ai_move_count--;
+	}
+}
+
+void tanke_enemy::update_count()
+{
+	count = 20 / speed;
 }
 
 void tanke_enemy::AI_bullte()
@@ -235,15 +283,118 @@ void tanke_enemy::AI_bullte()
 
 	if (bullte.Canfire() && ai_bullte_count == 0)
 	{
-		if (myrand_int(0, 100) > 30)
-		{
-			if (level < 2)
-				bullte.init(0, aimx, aimy, direct, 2 * speed);
-			else
-				bullte.init(0, aimx, aimy, direct, 5);
-		}
+
+		if (level < 2)
+			bullte.init(0, aimx, aimy, direct, 2 * speed);
+		else
+			bullte.init(0, aimx, aimy, direct, 5);
 
 		ai_bullte_count = 200;
 	}
 
+}
+
+void tanke_enemy::AI_direct(map & map, int(*tankmap)[26])
+{
+
+	if (ai_move_count == 0 && count == 0)
+	{
+		if (myrand_int(0, 10) > 4)
+		{
+			direct = Down;
+		}
+		else
+		{
+			if (myrand_int(0, 10) > 4)
+			{
+				if (myrand_int(0, 10) > 5)
+					direct = Right;
+				else
+					direct = Left;
+			}
+			else
+				direct = Up;
+		}
+	}
+}
+
+void tanke_enemy::AI_move()
+{
+	if (count == 0)
+	{
+		if (ai_move_count == 0)
+		{
+			ai_move_count = myrand_int(3, 20);
+		}
+		else
+		{
+			ai_move_count--;
+		}
+	}
+}
+
+void tanke_enemy::init_xy()
+{
+	if (count == 0)
+	{
+		x = map_x + aimx * 20;
+		y = map_y + aimy * 20;
+	}
+}
+
+bool tanke_enemy::canmove(map & map, int(*tankmap)[26])
+{
+
+	switch (direct)
+	{
+	case Up:
+		if (aimy <= 0)
+			return false;
+		if (tankmap[aimx][aimy - 1] != 0 || tankmap[aimx + 1][aimy - 1] != 0)
+			return false;
+		if (map.getmember(0, aimx, aimy - 1) != land || map.getmember(0, aimx + 1, aimy - 1) != land)
+			return false;
+		if (map.getmember(1, aimx, aimy - 1) == home || map.getmember(1, aimx + 1, aimy - 1) == home)
+			return false;
+		if (map.getmember(1, aimx, aimy - 1) == home_h || map.getmember(1, aimx + 1, aimy - 1) == home_h)
+			return false;
+		break;
+	case Down:
+		if (aimy >= 24)
+			return false;
+		if (tankmap[aimx][aimy + 2] != 0 || tankmap[aimx + 1][aimy + 2] != 0)
+			return false;
+		if (map.getmember(0, aimx, aimy + 2) != land || map.getmember(0, aimx + 1, aimy + 2) != land)
+			return false;
+		if (map.getmember(1, aimx, aimy + 2) == home || map.getmember(1, aimx + 1, aimy + 2) == home)
+			return false;
+		if (map.getmember(1, aimx, aimy + 2) == home_h || map.getmember(1, aimx + 1, aimy + 2) == home_h)
+			return false;
+		break;
+	case Right:
+		if (aimx >= 24)
+			return false;
+		if (tankmap[aimx + 2][aimy] != 0 || tankmap[aimx + 2][aimy + 1] != 0)
+			return false;
+		if (map.getmember(0, aimx + 2, aimy) != land || map.getmember(0, aimx + 2, aimy + 1) != land)
+			return false;
+		if (map.getmember(1, aimx + 2, aimy) == home || map.getmember(1, aimx + 2, aimy + 1) == home)
+			return false;
+		if (map.getmember(1, aimx + 2, aimy) == home_h || map.getmember(1, aimx + 2, aimy + 1) == home_h)
+			return false;
+		break;
+	case Left:
+		if (aimx <= 0)
+			return false;
+		if (tankmap[aimx - 1][aimy] != 0 || tankmap[aimx - 1][aimy + 1] != 0)
+			return false;
+		if (map.getmember(0, aimx - 1, aimy) != land || map.getmember(0, aimx - 1, aimy + 1) != land)
+			return false;
+		if (map.getmember(1, aimx - 1, aimy) == home || map.getmember(1, aimx - 1, aimy + 1) == home)
+			return false;
+		if (map.getmember(1, aimx - 1, aimy) == home_h || map.getmember(1, aimx - 1, aimy + 1) == home_h)
+			return false;
+		break;
+	}
+	return true;
 }

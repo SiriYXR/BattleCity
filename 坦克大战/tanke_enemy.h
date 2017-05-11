@@ -13,14 +13,22 @@ public:
 
 	void update_xy();
 	void update_speed();
+	void update_move(map & map, int(*tankmap)[26]);
+	void update_count();
 
 	void AI_bullte();
+	void AI_direct(map & map, int(*tankmap)[26]);
+	void AI_move();
 
+	void init_xy();
+
+	bool canmove(map & map, int(*tankmap)[26]);
 public:
 	bool isHeavy;
 	int level;
 
 	int ai_bullte_count;
+	int ai_move_count;
 
 };
 

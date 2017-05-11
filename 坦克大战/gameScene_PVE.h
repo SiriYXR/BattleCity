@@ -35,6 +35,7 @@ private:
 	void rend_lose();
 	void rend_pass();
 	void rend_pause();
+	void rend_through();
 
 	void isLose();
 	void isPass();

@@ -12,34 +12,37 @@ enum soloScenestate
 
 void soloScene::update()
 {
-	if (state == solo_newgame)
+	if (state != solo_null)
 	{
-		char buffer[255];
-		sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", 1);
-		DB.query(buffer);
-		soloGameloop(1);
-		init();
-		music.mu_Switch();
-	}
-	else if (state == solo_continuegame)
-	{
-		soloGameloop(lastlevel);
-		init();
-		music.mu_Switch();
-	}
-	else if (state == solo_selectlevel)
-	{
-		int n;
-		n = Selectlevelloop_PVE(maxlevel);
-		if (n > 0)
+		if (state == solo_newgame)
 		{
 			char buffer[255];
-			sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", n);
+			sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", 1);
 			DB.query(buffer);
-			soloGameloop(n);
+			soloGameloop(1);
+			music.mu_Switch();
 		}
+		else if (state == solo_continuegame)
+		{
+			soloGameloop(lastlevel);
+			music.mu_Switch();
+		}
+		else if (state == solo_selectlevel)
+		{
+			int n;
+			n = Selectlevelloop_PVE(maxlevel);
+			if (n > 0)
+			{
+				char buffer[255];
+				sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", n);
+				DB.query(buffer);
+				soloGameloop(n);
+			}
+
+			music.mu_Switch();
+		}
+
 		init();
-		music.mu_Switch();
 	}
 
 	update_time();
@@ -148,6 +151,7 @@ soloScene::soloScene()
 
 void soloScene::init()
 {
+	OutputDebugStringA("abc");
 	music.init();
 	state = solo_null;
 	time = 0;
