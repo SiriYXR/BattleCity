@@ -253,7 +253,10 @@ void gameScene_PVE::onKey_J(key_msg key)
 	if (playertank.bullte.Canfire())
 		if (key.key == key_J&&key.msg == key_msg_down)
 		{
-			playertank.bullte.init(1, playertank.aimx, playertank.aimy, playertank.direct, 2 * playertank.speed);
+			if(playertank.level==1)
+				playertank.bullte.init(1, playertank.aimx, playertank.aimy, playertank.direct, 10);
+			else
+				playertank.bullte.init(1, playertank.aimx, playertank.aimy, playertank.direct, 20);
 		}
 }
 

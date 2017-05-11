@@ -285,9 +285,9 @@ void tanke_enemy::AI_bullte()
 	{
 
 		if (level < 2)
-			bullte.init(0, aimx, aimy, direct, 2 * speed);
-		else
 			bullte.init(0, aimx, aimy, direct, 5);
+		else
+			bullte.init(0, aimx, aimy, direct, 10);
 
 		ai_bullte_count = 200;
 	}
