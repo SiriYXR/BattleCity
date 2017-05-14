@@ -285,6 +285,16 @@ void map::load_PVE(int level)
 
 void map::load_PVP(int level)
 {
+	FILE *fp;
+	fp = fopen("×ÊÔ´°ü\\maps\\classic\\classicmap_PVP.dat", "rb");
+	fseek(fp, sizeof(*member)*(level - 1), SEEK_SET);
+	fread(member, sizeof(*member), 1, fp);
+
+	fclose(fp);
+}
+
+void map::load_PVP(int level)
+{
 }
 
 void map::rendAll(Picture & picture)
