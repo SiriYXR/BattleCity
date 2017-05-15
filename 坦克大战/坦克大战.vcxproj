@@ -174,6 +174,7 @@
     <ClCompile Include="Picture.cpp" />
     <ClCompile Include="PVEselectlevelScene.cpp" />
     <ClCompile Include="PVPGameloop.cpp" />
+    <ClCompile Include="PVPselectlevelScene.cpp" />
     <ClCompile Include="rand.cpp" />
     <ClCompile Include="movie.cpp" />
     <ClCompile Include="Escloop.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="myQueue.h" />
     <ClInclude Include="Picture.h" />
     <ClInclude Include="PVEselectlevelScene.h" />
+    <ClInclude Include="PVPselectlevelScene.h" />
     <ClInclude Include="soloScene.h" />
     <ClInclude Include="tank.h" />
     <ClInclude Include="tanke_enemy.h" />

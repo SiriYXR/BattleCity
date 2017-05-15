@@ -75,7 +75,12 @@ void duetScene_classic::onKey(key_msg key)
 			break;
 		case 294 + 65:
 			music.mu_Switch();
-
+			int n;
+			n = Selectlevelloop_PVP();
+			if (n > 0)
+			{
+				PVPGameloop(n);
+			}
 			init();
 			music.mu_Switch();
 			break;

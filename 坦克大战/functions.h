@@ -93,10 +93,12 @@ void mainloop();
 void designPVEloop();
 void designPVPloop();
 void soloGameloop(int level=1);
-int Selectlevelloop_PVE(int maxlevel);
+void PVPGameloop(int level = -1);
 void  duet_custom_loop();
 void  duet_classic_loop();
-void PVPGameloop(int level = -1);
+int Selectlevelloop_PVE(int maxlevel);
+int Selectlevelloop_PVP();
+
 
 int myrand_int(int min, int max);
 

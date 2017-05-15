@@ -180,9 +180,6 @@
     <ClCompile Include="Selectlevelloop.cpp">
       <Filter>源文件\Loop</Filter>
     </ClCompile>
-    <ClCompile Include="PVEselectlevelScene.cpp">
-      <Filter>源文件\类\场景</Filter>
-    </ClCompile>
     <ClCompile Include="tanke_enemy.cpp">
       <Filter>源文件\类\Tank</Filter>
     </ClCompile>
@@ -209,6 +206,12 @@
     </ClCompile>
     <ClCompile Include="PVPGameloop.cpp">
       <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="PVEselectlevelScene.cpp">
+      <Filter>源文件\类\场景\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="PVPselectlevelScene.cpp">
+      <Filter>源文件\类\场景\GameScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -279,6 +282,9 @@
       <Filter>头文件\类\场景\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="gameScene_PVP.h">
+      <Filter>头文件\类\场景\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="PVPselectlevelScene.h">
       <Filter>头文件\类\场景\GameScene</Filter>
     </ClInclude>
   </ItemGroup>

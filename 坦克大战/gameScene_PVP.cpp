@@ -382,7 +382,7 @@ void gameScene_PVP::rend_end()
 	if (state == lose1)
 		outtextxy((Win_W - 500) / 2, 200, "玩家2获胜！");
 	else
-		outtextxy((Win_W - 360) / 2, 150, "玩家1获胜！");
+		outtextxy((Win_W - 500) / 2, 150, "玩家1获胜！");
 
 	if (count_pass > 50)
 	{
