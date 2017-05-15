@@ -155,8 +155,13 @@
     <ClCompile Include="designPVEloop.cpp" />
     <ClCompile Include="designPVPloop.cpp" />
     <ClCompile Include="designScene.cpp" />
-    <ClCompile Include="duetloop.cpp" />
+    <ClCompile Include="duetScene_classic.cpp" />
+    <ClCompile Include="duetScene_custom.cpp" />
+    <ClCompile Include="duet_classic_loop.cpp" />
+    <ClCompile Include="duet_main_loop.cpp" />
+    <ClCompile Include="duetScene_main.cpp" />
     <ClCompile Include="escScene.cpp" />
+    <ClCompile Include="gameScene_PVP.cpp" />
     <ClCompile Include="gameScene_PVE.cpp" />
     <ClCompile Include="isoverloop.cpp" />
     <ClCompile Include="isover_design.cpp" />
@@ -168,6 +173,7 @@
     <ClCompile Include="myQueue.cpp" />
     <ClCompile Include="Picture.cpp" />
     <ClCompile Include="PVEselectlevelScene.cpp" />
+    <ClCompile Include="PVPGameloop.cpp" />
     <ClCompile Include="rand.cpp" />
     <ClCompile Include="movie.cpp" />
     <ClCompile Include="Escloop.cpp" />
@@ -178,6 +184,7 @@
     <ClCompile Include="tank.cpp" />
     <ClCompile Include="tanke_enemy.cpp" />
     <ClCompile Include="tank_player.cpp" />
+    <ClCompile Include="duet_custom_loop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ADBConnector.h" />
@@ -185,8 +192,12 @@
     <ClInclude Include="designer_PVE.h" />
     <ClInclude Include="designer_PVP.h" />
     <ClInclude Include="designScene.h" />
+    <ClInclude Include="duetScene_classic.h" />
+    <ClInclude Include="duetScene_custom.h" />
+    <ClInclude Include="duetScene_main.h" />
     <ClInclude Include="escScene.h" />
     <ClInclude Include="functions.h" />
+    <ClInclude Include="gameScene_PVP.h" />
     <ClInclude Include="gameScene_PVE.h" />
     <ClInclude Include="isover_design.h" />
     <ClInclude Include="mainScene.h" />

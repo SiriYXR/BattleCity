@@ -215,7 +215,7 @@ void map::Search()
 			if (member->map[1][i][j] == player2born)
 			{
 				member->player[1].x = i;
-				member->player[2].y = j;
+				member->player[1].y = j;
 				i = map_W;
 				j = map_H;
 			}
@@ -269,7 +269,6 @@ void map::load_design()
 		fp = fopen("×ÊÔ´°ü\\maps\\custom\\custommap_PVP.dat", "rb");
 	fseek(fp, sizeof(*member)*(0), SEEK_SET);
 	fread(member, sizeof(*member), 1, fp);
-
 	fclose(fp);
 }
 
@@ -291,10 +290,6 @@ void map::load_PVP(int level)
 	fread(member, sizeof(*member), 1, fp);
 
 	fclose(fp);
-}
-
-void map::load_PVP(int level)
-{
 }
 
 void map::rendAll(Picture & picture)

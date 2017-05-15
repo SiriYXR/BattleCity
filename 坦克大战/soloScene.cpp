@@ -151,7 +151,6 @@ soloScene::soloScene()
 
 void soloScene::init()
 {
-	OutputDebugStringA("abc");
 	music.init();
 	state = solo_null;
 	time = 0;

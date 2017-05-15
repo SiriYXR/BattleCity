@@ -1,7 +1,5 @@
 #include "gameScene_PVE.h"
 
-
-
 gameScene_PVE::gameScene_PVE()
 {
 	map.load_PVE(1);
@@ -545,7 +543,7 @@ void gameScene_PVE::rend_pause()
 	PIMAGE blackbar = newimage(Win_W, Win_H);
 	putimage_alphablend(NULL, blackbar, 0, 0, 200);
 	setfont(60, 0, "楷体");
-	outtextxy((Win_W - 360) / 2, (Win_H - 60) / 2, "按任P键继续");
+	outtextxy((Win_W - 360) / 2, (Win_H - 60) / 2, "按P键继续");
 	delimage(blackbar);
 }
 

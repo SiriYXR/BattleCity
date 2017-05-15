@@ -69,6 +69,13 @@ Picture::Picture()
 	getimage(map_PVE_19, "资源包\\图片\\地图\\地图预览\\PVE\\19.jpg");
 	getimage(map_PVE_20, "资源包\\图片\\地图\\地图预览\\PVE\\20.jpg");
 
+	//////PVP
+	getimage(map_PVP_1, "资源包\\图片\\地图\\地图预览\\PVP\\1.jpg");
+	getimage(map_PVP_2, "资源包\\图片\\地图\\地图预览\\PVP\\2.jpg");
+	getimage(map_PVP_3, "资源包\\图片\\地图\\地图预览\\PVP\\3.jpg");
+	getimage(map_PVP_4, "资源包\\图片\\地图\\地图预览\\PVP\\4.jpg");
+	getimage(map_PVP_5, "资源包\\图片\\地图\\地图预览\\PVP\\5.jpg");
+
 	getimage(map_lock, "资源包\\图片\\地图\\地图预览\\lock.jpg");
 
 
@@ -80,6 +87,7 @@ Picture::Picture()
 	getimage(selects, "资源包\\图片\\界面\\selects.png");
 	getimage(solo_selects, "资源包\\图片\\界面\\solo_selects.png");
 	getimage(design_selects, "资源包\\图片\\界面\\design_selects.png");
+	getimage(duet_main_selects, "资源包\\图片\\界面\\duet_main_selects.png");
 
 	getimage(title, "资源包\\图片\\界面\\title.png");
 	getimage(end, "资源包\\图片\\界面\\end.png");
@@ -88,6 +96,7 @@ Picture::Picture()
 	getimage(copyright, "资源包\\图片\\界面\\copyright.png");
 
 	getimage(instruction_solo, "资源包\\图片\\界面\\instruction_solo.png");
+	getimage(instruction_duet, "资源包\\图片\\界面\\instruction_duet.png");
 	//坦克
 	//-----------------------------
 	////出生
@@ -225,6 +234,13 @@ Picture::~Picture()
 	delimage(map_PVE_19);
 	delimage(map_PVE_20);
 
+	//////PVP
+	delimage(map_PVP_1);
+	delimage(map_PVP_2);
+	delimage(map_PVP_3);
+	delimage(map_PVP_4);
+	delimage(map_PVP_5);
+
 	delimage(map_lock);
 
 	//界面
@@ -234,6 +250,7 @@ Picture::~Picture()
 	delimage(selects);
 	delimage(solo_selects);
 	delimage(design_selects);
+	delimage(duet_main_selects);
 
 	delimage(title);
 	delimage(end);
@@ -242,6 +259,7 @@ Picture::~Picture()
 	delimage(copyright);
 
 	delimage(instruction_solo);
+	delimage(instruction_duet);
 
 	//坦克
 	//-----------------------------

@@ -89,7 +89,7 @@ void Music::mu_Dead_Enemy()
 void Music::mu_Dead_Player()
 {
 	mciSendString(TEXT("seek dead_player to 0"), NULL, 0, NULL);
-	mciSendString(TEXT("play hit_player"), NULL, 0, NULL);
+	mciSendString(TEXT("play dead_player"), NULL, 0, NULL);
 }
 
 void Music::mu_Prop_Appear()

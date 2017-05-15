@@ -85,6 +85,12 @@
     <Filter Include="源文件\类\自定义模板">
       <UniqueIdentifier>{7350f107-0494-43ce-8bb0-7cfc9401779d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\类\场景\Duet">
+      <UniqueIdentifier>{215df25e-1b56-462b-a3c4-cddc1b4321c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\类\场景\Duet">
+      <UniqueIdentifier>{c491c8a4-78a7-4c23-9928-6a7d84d116eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -147,9 +153,6 @@
     <ClCompile Include="designPVPloop.cpp">
       <Filter>源文件\Loop\Designer</Filter>
     </ClCompile>
-    <ClCompile Include="duetloop.cpp">
-      <Filter>源文件\Loop\Duet</Filter>
-    </ClCompile>
     <ClCompile Include="soloGameloop.cpp">
       <Filter>源文件\Loop\Solo</Filter>
     </ClCompile>
@@ -182,6 +185,30 @@
     </ClCompile>
     <ClCompile Include="tanke_enemy.cpp">
       <Filter>源文件\类\Tank</Filter>
+    </ClCompile>
+    <ClCompile Include="duetScene_main.cpp">
+      <Filter>源文件\类\场景\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duet_main_loop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duet_custom_loop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duetScene_classic.cpp">
+      <Filter>源文件\类\场景\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duetScene_custom.cpp">
+      <Filter>源文件\类\场景\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duet_classic_loop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="gameScene_PVP.cpp">
+      <Filter>源文件\类\场景\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="PVPGameloop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,8 +266,20 @@
     <ClInclude Include="tanke_enemy.h">
       <Filter>头文件\类\Tank</Filter>
     </ClInclude>
+    <ClInclude Include="duetScene_main.h">
+      <Filter>头文件\类\场景\Duet</Filter>
+    </ClInclude>
+    <ClInclude Include="duetScene_classic.h">
+      <Filter>头文件\类\场景\Duet</Filter>
+    </ClInclude>
+    <ClInclude Include="duetScene_custom.h">
+      <Filter>头文件\类\场景\Duet</Filter>
+    </ClInclude>
     <ClInclude Include="PVEselectlevelScene.h">
-      <Filter>头文件\类\场景</Filter>
+      <Filter>头文件\类\场景\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="gameScene_PVP.h">
+      <Filter>头文件\类\场景\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

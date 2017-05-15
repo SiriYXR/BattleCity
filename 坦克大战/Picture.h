@@ -78,6 +78,13 @@ public:
 	PIMAGE map_PVE_19 = newimage();
 	PIMAGE map_PVE_20 = newimage();
 
+	////PVP
+	PIMAGE map_PVP_1 = newimage();
+	PIMAGE map_PVP_2 = newimage();
+	PIMAGE map_PVP_3 = newimage();
+	PIMAGE map_PVP_4 = newimage();
+	PIMAGE map_PVP_5 = newimage();
+
 	PIMAGE map_lock = newimage();
 
 	//½çÃæ
@@ -87,6 +94,7 @@ public:
 	PIMAGE selects = newimage();
 	PIMAGE solo_selects = newimage();
 	PIMAGE design_selects = newimage();
+	PIMAGE duet_main_selects = newimage();
 
 	PIMAGE title = newimage();
 	PIMAGE end = newimage();
@@ -95,6 +103,7 @@ public:
 	PIMAGE copyright = newimage();
 
 	PIMAGE instruction_solo = newimage();
+	PIMAGE instruction_duet = newimage();
 
 	//Ì¹¿Ë
 	//-----------------------------
