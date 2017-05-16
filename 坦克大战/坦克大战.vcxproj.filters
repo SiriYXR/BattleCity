@@ -213,6 +213,18 @@
     <ClCompile Include="PVPselectlevelScene.cpp">
       <Filter>源文件\类\场景\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="gameScene_PVE_duet.cpp">
+      <Filter>源文件\类\场景\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="duet_PVEGameloop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duet_classic_PVEloop.cpp">
+      <Filter>源文件\Loop\Duet</Filter>
+    </ClCompile>
+    <ClCompile Include="duetScene_classic_PVE.cpp">
+      <Filter>源文件\类\场景\Duet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h">
@@ -286,6 +298,12 @@
     </ClInclude>
     <ClInclude Include="PVPselectlevelScene.h">
       <Filter>头文件\类\场景\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="gameScene_PVE_duet.h">
+      <Filter>头文件\类\场景\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="duetScene_classic_PVE.h">
+      <Filter>头文件\类\场景\Duet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,9 +16,6 @@ void soloScene::update()
 	{
 		if (state == solo_newgame)
 		{
-			char buffer[255];
-			sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", 1);
-			DB.query(buffer);
 			soloGameloop(1);
 			music.mu_Switch();
 		}
@@ -33,9 +30,6 @@ void soloScene::update()
 			n = Selectlevelloop_PVE(maxlevel);
 			if (n > 0)
 			{
-				char buffer[255];
-				sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", n);
-				DB.query(buffer);
 				soloGameloop(n);
 			}
 

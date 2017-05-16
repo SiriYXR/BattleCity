@@ -88,17 +88,17 @@ const int  map_H = 26;
 const int	map_x = 30;
 const int	map_y = (Win_H - 20 * 26) / 2;
 
-
 void mainloop();
 void designPVEloop();
 void designPVPloop();
 void soloGameloop(int level=1);
 void PVPGameloop(int level = -1);
-void  duet_custom_loop();
-void  duet_classic_loop();
+void duet_PVEGameloop(int level = -1);
+void duet_custom_loop();
+void duet_classic_loop();
+void duet_classic_PVE_loop();
 int Selectlevelloop_PVE(int maxlevel);
 int Selectlevelloop_PVP();
-
 
 int myrand_int(int min, int max);
 

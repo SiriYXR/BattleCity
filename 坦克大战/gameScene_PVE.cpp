@@ -6,6 +6,7 @@ gameScene_PVE::gameScene_PVE()
 
 	isover = false;
 	state = gaming;
+	level = 1;
 
 	playerlife = 5;
 	score= 0;
@@ -19,6 +20,10 @@ gameScene_PVE::gameScene_PVE()
 	auto result = DB.query("select * from battle_city where mainKey=1");
 	result.next();
 	historyscore = atoi(result["score"].c_str());
+
+	char buffer[255];
+	sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", level);
+	DB.query(buffer);
 
 	playertank.init_tank_player(bornQueue, map);
 	delete_enemy();
@@ -46,6 +51,10 @@ gameScene_PVE::gameScene_PVE(int level)
 	auto result = DB.query("select * from battle_city where mainKey=1");
 	result.next();
 	historyscore = atoi(result["score"].c_str());
+
+	char buffer[255];
+	sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", level);
+	DB.query(buffer);
 
 	playertank.init_tank_player(bornQueue, map);
 	delete_enemy();
@@ -96,17 +105,21 @@ void gameScene_PVE::initbulltemap()
 
 void gameScene_PVE::delete_enemy()
 {
+	tanke_enemy *p;
 	while (!enemyQueue.empty())
 	{
-		delete enemyQueue.front();
+		p = enemyQueue.front();
+		delete p;
 		enemyQueue.pop();
 	}
 
 	while (!deadenemyQueue.empty())
 	{
-		delete deadenemyQueue.front();
+		p = deadenemyQueue.front();
+		delete p;
 		deadenemyQueue.pop();
 	}
+	p = NULL;
 }
 
 
@@ -143,23 +156,6 @@ void gameScene_PVE::update()
 	{
 		if (count_pass > 60)
 		{
-			
-			char buffer[255];
-			int maxlevel;
-
-			sprintf(buffer, "update battle_city set lastlevel = ('%d') where mainKey = 1", level);
-			DB.query(buffer);
-
-			auto result = DB.query("select * from battle_city where mainKey=1");
-			result.next();
-			maxlevel = atoi(result["maxlevel"].c_str());
-
-			if (level > maxlevel)
-			{
-				sprintf(buffer, "update battle_city set maxlevel = ('%d') where mainKey = 1", level);
-				DB.query(buffer);
-			}
-
 			char ch;
 			if (level > 20)
 			{
@@ -174,6 +170,17 @@ void gameScene_PVE::update()
 				else
 				{
 					level++;
+					char buffer[255];
+					int maxlevel;
+					auto result = DB.query("select * from battle_city where mainKey=1");
+					result.next();
+					maxlevel = atoi(result["maxlevel"].c_str());
+
+					if (level > maxlevel)
+					{
+						sprintf(buffer, "update battle_city set maxlevel = ('%d') where mainKey = 1", level);
+						DB.query(buffer);
+					}
 					initgame();
 				}
 			}
@@ -267,49 +274,51 @@ void gameScene_PVE::onKey_J(key_msg key)
 
 void gameScene_PVE::onKey_WASD(key_msg key)
 {
+	if (playertank.count == 0)
+	{
+		if (key.key == key_S&&key.msg == key_msg_down)
+		{
+			playertank.direct = Down;
+			if (canmove(playertank.aimx, playertank.aimy, key))
+			{
+				playertank.init_xy();
+				playertank.aimy++;
+				playertank.update_count();
 
-	if (key.key == key_S&&key.msg == key_msg_down)
-	{
-		playertank.direct = Down;
-		if (canmove(playertank.aimx, playertank.aimy, key))
-		{
-			playertank.init_xy();
-			playertank.aimy++;
-			playertank.update_count();
-			
+			}
 		}
-	}
-	if (key.key == key_W&&key.msg == key_msg_down)
-	{
-		playertank.direct = Up;
-		if (canmove(playertank.aimx, playertank.aimy, key))
+		if (key.key == key_W&&key.msg == key_msg_down)
 		{
-			playertank.init_xy();
-			playertank.aimy--;
-			playertank.update_count();
-			
+			playertank.direct = Up;
+			if (canmove(playertank.aimx, playertank.aimy, key))
+			{
+				playertank.init_xy();
+				playertank.aimy--;
+				playertank.update_count();
+
+			}
 		}
-	}
-	if (key.key == key_D&&key.msg == key_msg_down)
-	{
-		playertank.direct = Right;
-		if (canmove(playertank.aimx, playertank.aimy, key))
+		if (key.key == key_D&&key.msg == key_msg_down)
 		{
-			playertank.init_xy();
-			playertank.aimx++;
-			playertank.update_count();
-			
+			playertank.direct = Right;
+			if (canmove(playertank.aimx, playertank.aimy, key))
+			{
+				playertank.init_xy();
+				playertank.aimx++;
+				playertank.update_count();
+
+			}
 		}
-	}
-	if (key.key == key_A&&key.msg == key_msg_down)
-	{
-		playertank.direct = Left;
-		if (canmove(playertank.aimx, playertank.aimy, key))
+		if (key.key == key_A&&key.msg == key_msg_down)
 		{
-			playertank.init_xy();
-			playertank.aimx--;
-			playertank.update_count();
-			
+			playertank.direct = Left;
+			if (canmove(playertank.aimx, playertank.aimy, key))
+			{
+				playertank.init_xy();
+				playertank.aimx--;
+				playertank.update_count();
+
+			}
 		}
 	}
 }

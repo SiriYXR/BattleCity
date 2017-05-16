@@ -69,7 +69,7 @@ void duetScene_classic::onKey(key_msg key)
 		{
 		case 294:
 			music.mu_Switch();
-
+			duet_classic_PVE_loop();
 			init();
 			music.mu_Switch();
 			break;
