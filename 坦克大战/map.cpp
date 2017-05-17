@@ -253,7 +253,7 @@ void map::save_design()
 	Search();
 	FILE *fp;
 	if (member->gamemode == PVE)
-		fp = fopen("资源包\\maps\\custom\\custommap_PVE.dat", "ab");
+		fp = fopen("资源包\\maps\\custom\\custommap_PVE.dat", "wb");
 	else
 		fp = fopen("资源包\\maps\\custom\\custommap_PVP.dat", "wb");
 	fwrite(member, sizeof(*member), 1, fp);
