@@ -1,7 +1,5 @@
 #include "gameScene_PVE_duet.h"
 
-
-
 gameScene_PVE_duet::gameScene_PVE_duet()
 {
 	map.init(PVE);
@@ -16,6 +14,7 @@ gameScene_PVE_duet::gameScene_PVE_duet()
 	historyscore = 0;
 	enemynum = 20;
 	count_pass = 0;
+	count_enemypause = 0;
 
 	inittankmap();
 	initbulletmap();
@@ -27,6 +26,7 @@ gameScene_PVE_duet::gameScene_PVE_duet()
 	player_tank1.init_tank_player(bornQueue, map, Up);
 	player_tank2.init_tank_player(bornQueue, map, Up, false);
 	delete_enemy();
+	delete_property();
 	music.mu_Start();
 }
 
@@ -52,6 +52,7 @@ gameScene_PVE_duet::gameScene_PVE_duet(int level)
 	historyscore = 0;
 	enemynum = 20;
 	count_pass = 0;
+	count_enemypause = 0;
 
 	inittankmap();
 	initbulletmap();
@@ -63,6 +64,7 @@ gameScene_PVE_duet::gameScene_PVE_duet(int level)
 	player_tank1.init_tank_player(bornQueue, map, Up);
 	player_tank2.init_tank_player(bornQueue, map, Up, false);
 	delete_enemy();
+	delete_property();
 	music.mu_Start();
 }
 
@@ -70,6 +72,7 @@ gameScene_PVE_duet::gameScene_PVE_duet(int level)
 gameScene_PVE_duet::~gameScene_PVE_duet()
 {
 	delete_enemy();
+	delete_property();
 }
 
 void gameScene_PVE_duet::update()
@@ -78,23 +81,28 @@ void gameScene_PVE_duet::update()
 	{
 		update_tankmap();
 		update_bulletmap();
-		player_tank1.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+		player_tank1.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue,propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 		update_tankmap();
 		update_bulletmap();
-		player_tank2.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+		player_tank2.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 		update_tankmap();
 		update_bulletmap();
 		update_enemyborn();
 
-		int n = enemyQueue.size();
-		while (n--)
+		if (!count_enemypause)
 		{
-			update_tankmap();
-			update_bulletmap();
-			enemyQueue.front()->update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
-			enemyQueue.push(enemyQueue.front());
-			enemyQueue.pop();
+			int n = enemyQueue.size();
+			while (n--)
+			{
+				update_tankmap();
+				update_bulletmap();
+				enemyQueue.front()->update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				enemyQueue.push(enemyQueue.front());
+				enemyQueue.pop();
+			}
 		}
+		else
+			count_enemypause--;
 
 		update_state();
 	}
@@ -139,8 +147,6 @@ void gameScene_PVE_duet::update()
 		}
 		count_pass++;
 	}
-
-	
 }
 
 void gameScene_PVE_duet::render()
@@ -150,6 +156,8 @@ void gameScene_PVE_duet::render()
 	rendMainface();
 	map.rendermap1(picture);
 	map.rendermaphome(picture);
+
+	rend_prop();
 
 	player_tank1.render(picture);
 	player_tank2.render(picture);
@@ -276,6 +284,28 @@ void gameScene_PVE_duet::update_state()
 	isPass();
 }
 
+void gameScene_PVE_duet::update_proptime()
+{
+	int n = propertyQueue.size();
+	while (n--)
+	{
+		if (propertyQueue.front()->time)
+		{
+			propertyQueue.front()->time--;
+			propertyQueue.push(propertyQueue.front());
+			propertyQueue.pop();
+		}
+		else
+		{
+			prop *p;
+			p = propertyQueue.front();
+			delete p;
+			p = NULL;
+			propertyQueue.pop();
+		}
+	}
+}
+
 void gameScene_PVE_duet::onKey_Jand0(key_msg key)
 {
 	if (player_tank1.bullte.Canfire())
@@ -307,8 +337,8 @@ void gameScene_PVE_duet::onKey_WASD(key_msg key)
 			{
 				player_tank1.init_xy();
 				player_tank1.aimy++;
+				getProp(player_tank1);
 				player_tank1.update_count();
-
 			}
 		}
 		if (key.key == key_W&&key.msg == key_msg_down)
@@ -318,8 +348,8 @@ void gameScene_PVE_duet::onKey_WASD(key_msg key)
 			{
 				player_tank1.init_xy();
 				player_tank1.aimy--;
+				getProp(player_tank1);
 				player_tank1.update_count();
-
 			}
 		}
 		if (key.key == key_D&&key.msg == key_msg_down)
@@ -329,8 +359,8 @@ void gameScene_PVE_duet::onKey_WASD(key_msg key)
 			{
 				player_tank1.init_xy();
 				player_tank1.aimx++;
+				getProp(player_tank1);
 				player_tank1.update_count();
-
 			}
 		}
 		if (key.key == key_A&&key.msg == key_msg_down)
@@ -340,8 +370,8 @@ void gameScene_PVE_duet::onKey_WASD(key_msg key)
 			{
 				player_tank1.init_xy();
 				player_tank1.aimx--;
+				getProp(player_tank1);
 				player_tank1.update_count();
-
 			}
 		}
 	}
@@ -358,8 +388,8 @@ void gameScene_PVE_duet::onKey_Direction(key_msg key)
 			{
 				player_tank2.init_xy();
 				player_tank2.aimy++;
+				getProp(player_tank2);
 				player_tank2.update_count();
-
 			}
 		}
 		if (key.key == key_up&&key.msg == key_msg_down)
@@ -369,8 +399,8 @@ void gameScene_PVE_duet::onKey_Direction(key_msg key)
 			{
 				player_tank2.init_xy();
 				player_tank2.aimy--;
+				getProp(player_tank2);
 				player_tank2.update_count();
-
 			}
 		}
 		if (key.key == key_right&&key.msg == key_msg_down)
@@ -380,8 +410,8 @@ void gameScene_PVE_duet::onKey_Direction(key_msg key)
 			{
 				player_tank2.init_xy();
 				player_tank2.aimx++;
+				getProp(player_tank2);
 				player_tank2.update_count();
-
 			}
 		}
 		if (key.key == key_left&&key.msg == key_msg_down)
@@ -391,8 +421,8 @@ void gameScene_PVE_duet::onKey_Direction(key_msg key)
 			{
 				player_tank2.init_xy();
 				player_tank2.aimx--;
+				getProp(player_tank2);
 				player_tank2.update_count();
-
 			}
 		}
 	}
@@ -493,6 +523,36 @@ void gameScene_PVE_duet::rend_born()
 			bornQueue.push(bornQueue.front_x(), bornQueue.front_y(), bornQueue.front_count() - 1);
 			bornQueue.pop();
 		}
+	}
+}
+
+void gameScene_PVE_duet::rend_prop()
+{
+	int n = propertyQueue.size();
+	while (n--)
+	{
+		switch (propertyQueue.front()->pro)
+		{
+		case tank:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.life);
+			break;
+		case bomb:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.bomb);
+			break;
+		case star:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.star);
+			break;
+		case timer:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.timer);
+			break;
+		case sheld:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.shield);
+			break;
+		default:
+			break;
+		}
+		propertyQueue.push(propertyQueue.front());
+		propertyQueue.pop();
 	}
 }
 
@@ -696,6 +756,26 @@ void gameScene_PVE_duet::delete_enemy()
 	p = NULL;
 }
 
+void gameScene_PVE_duet::delete_property()
+{
+	prop *p;
+	while (!propertyQueue.empty())
+	{
+		p = propertyQueue.front();
+		delete p;
+		propertyQueue.pop();
+	}
+
+	while (!propertyusedQueue.empty())
+	{
+		p = propertyusedQueue.front();
+		delete p;
+		propertyusedQueue.pop();
+	}
+
+	p = NULL;
+}
+
 bool gameScene_PVE_duet::canmove1(key_msg key)
 {
 	if (player_tank1.count == 0)
@@ -839,4 +919,76 @@ bool gameScene_PVE_duet::enemycanBorn()
 	if (n == enemybornnum)
 		return false;
 	return true;
+}
+
+void gameScene_PVE_duet::getProp(tank_player & tank_player)
+{
+	int n = propertyQueue.size();
+	while (n--)
+	{
+		if ((tank_player.aimx == propertyQueue.front()->x&&tank_player.aimy == propertyQueue.front()->y) || (tank_player.aimx + 1 == propertyQueue.front()->x&&tank_player.aimy == propertyQueue.front()->y) || (tank_player.aimx == propertyQueue.front()->x&&tank_player.aimy + 1 == propertyQueue.front()->y) || (tank_player.aimx + 1 == propertyQueue.front()->x&&tank_player.aimy + 1 == propertyQueue.front()->y))
+		{
+			music.mu_Prop_get();
+			switch (propertyQueue.front()->pro)
+			{
+			case tank:
+				prop_tank(tank_player);
+				break;
+			case bomb:
+				prop_bomb(tank_player);
+				break;
+			case star:
+				prop_star(tank_player);
+				break;
+			case timer:
+				prop_timer(tank_player);
+				break;
+			case sheld:
+				prop_sheld(tank_player);
+				break;
+			default:
+				break;
+			}
+			propertyusedQueue.push(propertyQueue.front());
+			propertyQueue.pop();
+		}
+		else
+		{
+			propertyQueue.push(propertyQueue.front());
+			propertyQueue.pop();
+		}
+	}
+}
+
+void gameScene_PVE_duet::prop_tank(tank_player & tank_player)
+{
+	playerlife++;
+}
+
+void gameScene_PVE_duet::prop_star(tank_player & tank_player)
+{
+	tank_player.level = 2;
+	tank_player.update_speed();
+}
+
+void gameScene_PVE_duet::prop_bomb(tank_player & tank_player)
+{
+	music.mu_Dead_Enemy();
+	while (!enemyQueue.empty())
+	{
+		bombQueue.push(enemyQueue.front()->x, enemyQueue.front()->y);
+		deadenemyQueue.push(enemyQueue.front());
+		enemyQueue.pop();
+		enemynum--;
+	}
+}
+
+void gameScene_PVE_duet::prop_sheld(tank_player & tank_player)
+{
+	tank_player.count_sheld = 500;
+}
+
+void gameScene_PVE_duet::prop_timer(tank_player & tank_player)
+{
+	count_enemypause = 500;
 }

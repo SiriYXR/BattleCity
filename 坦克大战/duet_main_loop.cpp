@@ -23,5 +23,4 @@ void mainScene::Duet()
 
 		scene.render();
 	}
-
 }

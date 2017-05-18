@@ -11,7 +11,7 @@ public:
 	void init_xy();
 
 	void update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue,queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score);
-	void update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player& player_tank1, tank_player& player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score);
+	void update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player& player_tank1, tank_player& player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score);
 	void update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player& player_tank1, tank_player& player_tank2, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int playerlife[]);
 	void render(Picture& picture);
 

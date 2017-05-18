@@ -34,5 +34,4 @@ private:
 	int cursor_y;
 	int time;
 	bool isover;
-	
 };

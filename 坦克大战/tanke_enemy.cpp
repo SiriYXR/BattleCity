@@ -56,7 +56,7 @@ void tanke_enemy::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank
 	}
 }
 
-void tanke_enemy::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
+void tanke_enemy::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
 {
 	AI_bullte();
 
@@ -67,7 +67,7 @@ void tanke_enemy::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank
 
 	if (!bullte.Canfire())
 	{
-		bullte.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+		bullte.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 	}
 }
 

@@ -293,7 +293,6 @@ void gameScene_PVE::onKey(key_msg key)
 
 }
 
-
 void gameScene_PVE::onKey_J(key_msg key)
 {
 

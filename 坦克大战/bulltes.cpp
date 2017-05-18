@@ -20,9 +20,9 @@ void bulltes::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pla
 	update_xy();
 }
 
-void bulltes::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
+void bulltes::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
 {
-	update_move(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+	update_move(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 	update_xy();
 }
 
@@ -332,7 +332,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 	}
 }
 
-void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
+void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
 {
 	switch (direct)
 	{
@@ -364,6 +364,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], t
 							else
 								score += enemyQueue.front()->level * 100;
 							bombQueue.push(enemyQueue.front()->x, enemyQueue.front()->y);
+							creatProp(enemyQueue.front()->aimx, enemyQueue.front()->aimy, propertyQueue);
 							deadenemyQueue.push(enemyQueue.front());
 							enemyQueue.pop();
 							music.mu_Dead_Enemy();
@@ -446,6 +447,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], t
 							else
 								score += enemyQueue.front()->level * 100;
 							bombQueue.push(enemyQueue.front()->x, enemyQueue.front()->y);
+							creatProp(enemyQueue.front()->aimx, enemyQueue.front()->aimy, propertyQueue);
 							deadenemyQueue.push(enemyQueue.front());
 							enemyQueue.pop();
 							music.mu_Dead_Enemy();
@@ -1035,7 +1037,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 	return false;
 }
 
-bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
+bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
 {
 	if (bullet&&count == 0)
 	{
@@ -1079,7 +1081,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -1120,7 +1122,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -1161,7 +1163,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -1201,7 +1203,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -1419,9 +1421,9 @@ void bulltes::update_move(map & map, int(*tankmap)[26], int(*bulltemap)[26], tan
 		}
 }
 
-void bulltes::update_move(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
+void bulltes::update_move(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
 {
-	if (bullet&&Canmove(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score))
+	if (bullet&&Canmove(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score))
 		switch (direct)
 		{
 		case Up:
