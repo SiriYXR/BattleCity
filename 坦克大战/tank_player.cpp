@@ -9,6 +9,7 @@ void tank_player::init_tank_player(myQueue& bornQueue, map& map, direction direc
 	count = 0;
 	speed = 2;
 	level = 1;
+	count_sheld = 500;
 
 	bornQueue.push(x, y);
 	this->direct = direct;
@@ -25,6 +26,7 @@ void tank_player::init_tank_player(myQueue& bornQueue, map& map, direction direc
 	count = 0;
 	speed = 2;
 	level = 1;
+	count_sheld = 500;
 
 	bornQueue.push(x, y);
 	this->direct = direct;
@@ -46,18 +48,20 @@ tank_player::~tank_player()
 {
 }
 
-void tank_player::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void tank_player::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	update_xy();
+	update_sheld();
 	if (!bullte.Canfire())
 	{
-		bullte.update(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+		bullte.update(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue,bombQueue, bornQueue, state, playerlife, enemynum, score);
 	}
 }
 
 void tank_player::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int & playerlife, int & enemynum, int & score)
 {
 	update_xy();
+	update_sheld();
 	if (!bullte.Canfire())
 	{
 		bullte.update(map, tankmap, bulletmap, player_tank1, player_tank2, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
@@ -67,6 +71,7 @@ void tank_player::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank
 void tank_player::update(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_player & player_tank1, tank_player & player_tank2, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int playerlife[])
 {
 	update_xy();
+	update_sheld();
 	if (!bullte.Canfire())
 	{
 		bullte.update(map, tankmap, bulletmap, player_tank1, player_tank2, bombQueue, bornQueue, state, playerlife);
@@ -95,6 +100,27 @@ void tank_player::update_xy()
 		count--;
 	}
 }
+
+void tank_player::update_sheld()
+{
+	if (count_sheld)
+		count_sheld--;
+}
+
+void tank_player::update_speed()
+{
+	speed = level * 2;
+}
+
+void tank_player::rend_bar(int x, int y, int w, int h, int n, color_t color)
+{
+	setfillcolor(color);
+	bar(x - n, y - n, x + w + n, y);
+	bar(x - n, y + h, x + w + n, y + h + n);
+	bar(x - n, y - n, x, y + h + n);
+	bar(x + w + n, y - n, x + w, y + h + n);
+}
+
 void tank_player::render(Picture& picture)
 {
 	switch (direct)
@@ -126,6 +152,9 @@ void tank_player::render(Picture& picture)
 	default:
 		break;
 	}
+
+	if (count_sheld)
+		rend_bar(x,y,40,40);
 
 	if (!bullte.Canfire())
 	{

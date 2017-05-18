@@ -9,10 +9,11 @@ gameScene_PVE::gameScene_PVE()
 	level = 1;
 
 	playerlife = 5;
-	score= 0;
+	score = 0;
 	historyscore = 0;
 	enemynum = 20;
 	count_pass = 0;
+	count_enemypause = 0;
 
 	inittankmap();
 	initbulltemap();
@@ -32,7 +33,7 @@ gameScene_PVE::gameScene_PVE()
 
 gameScene_PVE::gameScene_PVE(int level)
 {
-	
+
 	map.load_PVE(level);
 
 	this->level = level;
@@ -40,10 +41,11 @@ gameScene_PVE::gameScene_PVE(int level)
 	state = gaming;
 
 	playerlife = 5;
-	score= 0;
+	score = 0;
 	historyscore = 0;
 	enemynum = 20;
 	count_pass = 0;
+	count_enemypause = 0;
 
 	inittankmap();
 	initbulltemap();
@@ -69,6 +71,7 @@ void gameScene_PVE::init()
 	historyscore = 0;
 	enemynum = 20;
 	count_pass = 0;
+	count_enemypause = 0;
 
 	inittankmap();
 	initbulltemap();
@@ -79,6 +82,8 @@ void gameScene_PVE::init()
 
 	playertank.init_tank_player(bornQueue, map);
 	delete_enemy();
+	delete_property();
+
 	music.init();
 	music.mu_Start();
 }
@@ -122,10 +127,32 @@ void gameScene_PVE::delete_enemy()
 	p = NULL;
 }
 
+void gameScene_PVE::delete_property()
+{
+	prop *p;
+	while (!propertyQueue.empty())
+	{
+		p = propertyQueue.front();
+		delete p;
+		propertyQueue.pop();
+	}
+
+	while (!propertyusedQueue.empty())
+	{
+		p = propertyusedQueue.front();
+		delete p;
+		propertyusedQueue.pop();
+	}
+
+	p = NULL;
+}
+
+
 
 gameScene_PVE::~gameScene_PVE()
 {
 	delete_enemy();
+	delete_property();
 }
 
 void gameScene_PVE::update()
@@ -134,24 +161,30 @@ void gameScene_PVE::update()
 	{
 		update_tankmap();
 		update_bulltemap();
-		playertank.update(map, tankmap,bulltemap, playertank,enemyQueue,deadenemyQueue, bombQueue,bornQueue, state,playerlife,enemynum,score);
+		playertank.update(map, tankmap, bulltemap, playertank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 		update_tankmap();
 		update_bulltemap();
 		update_enemyborn();
 
-		int n = enemyQueue.size();
-		while (n--)
+		if (!count_enemypause)
 		{
-			update_tankmap();
-			update_bulltemap();
-			enemyQueue.front()->update(map, tankmap, bulltemap, playertank,enemyQueue,deadenemyQueue, bombQueue,bornQueue, state,playerlife,enemynum,score);
-			enemyQueue.push(enemyQueue.front());
-			enemyQueue.pop();
+			int n = enemyQueue.size();
+			while (n--)
+			{
+				update_tankmap();
+				update_bulltemap();
+				enemyQueue.front()->update(map, tankmap, bulltemap, playertank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				enemyQueue.push(enemyQueue.front());
+				enemyQueue.pop();
+			}
 		}
+		else
+			count_enemypause--;
 
+		update_proptime();
 		update_state();
 	}
-	
+
 	if (state == pass)
 	{
 		if (count_pass > 60)
@@ -198,6 +231,7 @@ void gameScene_PVE::render()
 	map.rendermap1(picture);
 	map.rendermaphome(picture);
 
+	rend_prop();
 	playertank.render(picture);
 	int n = enemyQueue.size();
 	while (n--)
@@ -208,6 +242,7 @@ void gameScene_PVE::render()
 	}
 
 	map.rendermap2(picture);
+
 	rend_bomb();
 	rend_born();
 
@@ -228,7 +263,7 @@ void gameScene_PVE::render()
 			rend_pass();
 		}
 	}
-		
+
 
 	picture.rend();
 }
@@ -265,7 +300,7 @@ void gameScene_PVE::onKey_J(key_msg key)
 	if (playertank.bullte.Canfire())
 		if (key.key == key_J&&key.msg == key_msg_down)
 		{
-			if(playertank.level==1)
+			if (playertank.level == 1)
 				playertank.bullte.init(1, playertank.aimx, playertank.aimy, playertank.direct, 10);
 			else
 				playertank.bullte.init(1, playertank.aimx, playertank.aimy, playertank.direct, 20);
@@ -283,8 +318,8 @@ void gameScene_PVE::onKey_WASD(key_msg key)
 			{
 				playertank.init_xy();
 				playertank.aimy++;
+				getProp(playertank);
 				playertank.update_count();
-
 			}
 		}
 		if (key.key == key_W&&key.msg == key_msg_down)
@@ -294,8 +329,8 @@ void gameScene_PVE::onKey_WASD(key_msg key)
 			{
 				playertank.init_xy();
 				playertank.aimy--;
+				getProp(playertank);
 				playertank.update_count();
-
 			}
 		}
 		if (key.key == key_D&&key.msg == key_msg_down)
@@ -305,8 +340,8 @@ void gameScene_PVE::onKey_WASD(key_msg key)
 			{
 				playertank.init_xy();
 				playertank.aimx++;
+				getProp(playertank);
 				playertank.update_count();
-
 			}
 		}
 		if (key.key == key_A&&key.msg == key_msg_down)
@@ -316,8 +351,8 @@ void gameScene_PVE::onKey_WASD(key_msg key)
 			{
 				playertank.init_xy();
 				playertank.aimx--;
+				getProp(playertank);
 				playertank.update_count();
-
 			}
 		}
 	}
@@ -348,7 +383,7 @@ void gameScene_PVE::onKey_ESC(key_msg key)
 void gameScene_PVE::update_enemyborn()
 {
 	static int count = 100;
-	if (enemynum>enemyQueue.size())
+	if (enemynum > enemyQueue.size())
 	{
 		if (enemyQueue.size() < 4)
 		{
@@ -367,9 +402,9 @@ void gameScene_PVE::update_tankmap()
 {
 	inittankmap();
 	tankmap[playertank.aimx][playertank.aimy] = 1;
-	tankmap[playertank.aimx+1][playertank.aimy] = 1;
-	tankmap[playertank.aimx][playertank.aimy+1] = 1;
-	tankmap[playertank.aimx+1][playertank.aimy+1] = 1;
+	tankmap[playertank.aimx + 1][playertank.aimy] = 1;
+	tankmap[playertank.aimx][playertank.aimy + 1] = 1;
+	tankmap[playertank.aimx + 1][playertank.aimy + 1] = 1;
 	int n = enemyQueue.size();
 	while (n--)
 	{
@@ -385,13 +420,13 @@ void gameScene_PVE::update_tankmap()
 void gameScene_PVE::update_bulltemap()
 {
 	initbulltemap();
-	if(playertank.bullte.bullet)
-	bulltemap[playertank.bullte.aimx][playertank.bullte.aimy] = 1;
+	if (playertank.bullte.bullet)
+		bulltemap[playertank.bullte.aimx][playertank.bullte.aimy] = 1;
 	int n = enemyQueue.size();
 	while (n--)
 	{
 		if (enemyQueue.front()->bullte.bullet)
-		bulltemap[enemyQueue.front()->bullte.aimx][enemyQueue.front()->bullte.aimy] = 1;
+			bulltemap[enemyQueue.front()->bullte.aimx][enemyQueue.front()->bullte.aimy] = 1;
 		enemyQueue.push(enemyQueue.front());
 		enemyQueue.pop();
 	}
@@ -401,6 +436,28 @@ void gameScene_PVE::update_state()
 {
 	isLose();
 	isPass();
+}
+
+void gameScene_PVE::update_proptime()
+{
+	int n = propertyQueue.size();
+	while (n--)
+	{
+		if (propertyQueue.front()->time)
+		{
+			propertyQueue.front()->time--;
+			propertyQueue.push(propertyQueue.front());
+			propertyQueue.pop();
+		}
+		else
+		{
+			prop *p;
+			p = propertyQueue.front();
+			delete p;
+			p = NULL;
+			propertyQueue.pop();
+		}
+	}
 }
 
 void gameScene_PVE::rendMainface()
@@ -452,7 +509,7 @@ void gameScene_PVE::rend_bomb()
 			bombQueue.pop();
 		else
 		{
-			movieBomb(bombQueue.front_count(), bombQueue.front_x(), bombQueue.front_y(),picture);
+			movieBomb(bombQueue.front_count(), bombQueue.front_x(), bombQueue.front_y(), picture);
 			bombQueue.push(bombQueue.front_x(), bombQueue.front_y(), bombQueue.front_count() - 1);
 			bombQueue.pop();
 		}
@@ -472,6 +529,36 @@ void gameScene_PVE::rend_born()
 			bornQueue.push(bornQueue.front_x(), bornQueue.front_y(), bornQueue.front_count() - 1);
 			bornQueue.pop();
 		}
+	}
+}
+
+void gameScene_PVE::rend_prop()
+{
+	int n = propertyQueue.size();
+	while (n--)
+	{
+		switch (propertyQueue.front()->pro)
+		{
+		case tank:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.life);
+			break;
+		case bomb:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.bomb);
+			break;
+		case star:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.star);
+			break;
+		case timer:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.timer);
+			break;
+		case sheld:
+			putimage(map_x + propertyQueue.front()->x * 20, map_y + propertyQueue.front()->y * 20, picture.shield);
+			break;
+		default:
+			break;
+		}
+		propertyQueue.push(propertyQueue.front());
+		propertyQueue.pop();
 	}
 }
 
@@ -518,7 +605,7 @@ void gameScene_PVE::rend_pass()
 	setcolor(WHITE);
 
 	setfont(100, 0, "楷体");
-	outtextxy((Win_W - 160) / 2,100, "过关！");
+	outtextxy((Win_W - 160) / 2, 100, "过关！");
 
 	if (score > historyscore)
 	{
@@ -566,7 +653,7 @@ void gameScene_PVE::rend_through()
 	setcolor(WHITE);
 
 	setfont(60, 0, "楷体");
-	outtextxy((Win_W - 540) / 2,100, "恭喜你通过最后一关！");
+	outtextxy((Win_W - 540) / 2, 100, "恭喜你通过最后一关！");
 
 	if (score > historyscore)
 	{
@@ -689,4 +776,77 @@ bool gameScene_PVE::enemycanBorn()
 	if (n == enemybornnum)
 		return false;
 	return true;
+}
+
+void gameScene_PVE::getProp(tank_player& tank_player)
+{
+	int n = propertyQueue.size();
+	while (n--)
+	{
+		if ((tank_player.aimx == propertyQueue.front()->x&&tank_player.aimy == propertyQueue.front()->y) || (tank_player.aimx + 1 == propertyQueue.front()->x&&tank_player.aimy == propertyQueue.front()->y) || (tank_player.aimx == propertyQueue.front()->x&&tank_player.aimy + 1 == propertyQueue.front()->y) || (tank_player.aimx + 1 == propertyQueue.front()->x&&tank_player.aimy + 1 == propertyQueue.front()->y))
+		{
+			music.mu_Prop_get();
+			switch (propertyQueue.front()->pro)
+			{
+			case tank:
+				prop_tank(tank_player);
+				break;
+			case bomb:
+				prop_bomb(tank_player);
+				break;
+			case star:
+				prop_star(tank_player);
+				break;
+			case timer:
+				prop_timer(tank_player);
+				break;
+			case sheld:
+				prop_sheld(tank_player);
+				break;
+			default:
+				break;
+			}
+			propertyusedQueue.push(propertyQueue.front());
+			propertyQueue.pop();
+		}
+		else
+		{
+			propertyQueue.push(propertyQueue.front());
+			propertyQueue.pop();
+		}
+	}
+
+}
+
+void gameScene_PVE::prop_tank(tank_player& tank_player)
+{
+	playerlife++;
+}
+
+void gameScene_PVE::prop_star(tank_player& tank_player)
+{
+	tank_player.level = 2;
+	tank_player.update_speed();
+}
+
+void gameScene_PVE::prop_bomb(tank_player& tank_player)
+{
+	music.mu_Dead_Enemy();
+	while (!enemyQueue.empty())
+	{
+		bombQueue.push(enemyQueue.front()->x, enemyQueue.front()->y);
+		deadenemyQueue.push(enemyQueue.front());
+		enemyQueue.pop();
+		enemynum--;
+	}
+}
+
+void gameScene_PVE::prop_sheld(tank_player& tank_player)
+{
+	tank_player.count_sheld = 500;
+}
+
+void gameScene_PVE::prop_timer(tank_player& tank_player)
+{
+	count_enemypause = 500;
 }

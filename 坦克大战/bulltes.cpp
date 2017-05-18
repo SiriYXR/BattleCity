@@ -14,9 +14,9 @@ bulltes::~bulltes()
 {
 }
 
-void bulltes::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::update(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
-	update_move(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+	update_move(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 	update_xy();
 }
 
@@ -193,7 +193,7 @@ void bulltes::BulletHit(map & map, gameState & state)
 }
 
 
-void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	switch (direct)
 	{
@@ -225,6 +225,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 							else
 								score += enemyQueue.front()->level * 100;
 							bombQueue.push(enemyQueue.front()->x, enemyQueue.front()->y);
+							creatProp(enemyQueue.front()->aimx, enemyQueue.front()->aimy, propertyQueue);
 							deadenemyQueue.push(enemyQueue.front());
 							enemyQueue.pop();
 							music.mu_Dead_Enemy();
@@ -241,18 +242,21 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 			}
 			else
 			{
-				if (((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy)) || ((player_tank.aimx == aimx + 1 && player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx + 1 && player_tank.aimy == aimy) || (player_tank.aimx == aimx + 1 && player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx + 1 && player_tank.aimy + 1 == aimy)))
+				if (!player_tank.count_sheld)
 				{
-					if (player_tank.level == 2)
+					if (((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy)) || ((player_tank.aimx == aimx + 1 && player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx + 1 && player_tank.aimy == aimy) || (player_tank.aimx == aimx + 1 && player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx + 1 && player_tank.aimy + 1 == aimy)))
 					{
-						player_tank.level--;
-						music.mu_Hit_Tank();
-					}
-					else
-					{
-						player_tank.init_tank_player(bornQueue, map);
-						playerlife--;
-						music.mu_Dead_Player();
+						if (player_tank.level == 2)
+						{
+							player_tank.level--;
+							music.mu_Hit_Tank();
+						}
+						else
+						{
+							player_tank.init_tank_player(bornQueue, map);
+							playerlife--;
+							music.mu_Dead_Player();
+						}
 					}
 				}
 			}
@@ -286,6 +290,7 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 							else
 								score += enemyQueue.front()->level * 100;
 							bombQueue.push(enemyQueue.front()->x, enemyQueue.front()->y);
+							creatProp(enemyQueue.front()->aimx, enemyQueue.front()->aimy, propertyQueue);
 							deadenemyQueue.push(enemyQueue.front());
 							enemyQueue.pop();
 							music.mu_Dead_Enemy();
@@ -302,18 +307,21 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulltemap)[26], t
 			}
 			else
 			{
-				if (((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy)) || ((player_tank.aimx == aimx&&player_tank.aimy == aimy + 1) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy + 1) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy + 1) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy + 1)))
+				if (!player_tank.count_sheld)
 				{
-					if (player_tank.level == 2)
+					if (((player_tank.aimx == aimx&&player_tank.aimy == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy)) || ((player_tank.aimx == aimx&&player_tank.aimy == aimy + 1) || (player_tank.aimx + 1 == aimx&&player_tank.aimy == aimy + 1) || (player_tank.aimx == aimx&&player_tank.aimy + 1 == aimy + 1) || (player_tank.aimx + 1 == aimx&&player_tank.aimy + 1 == aimy + 1)))
 					{
-						player_tank.level--;
-						music.mu_Hit_Tank();
-					}
-					else
-					{
-						player_tank.init_tank_player(bornQueue, map);
-						playerlife--;
-						music.mu_Dead_Player();
+						if (player_tank.level == 2)
+						{
+							player_tank.level--;
+							music.mu_Hit_Tank();
+						}
+						else
+						{
+							player_tank.init_tank_player(bornQueue, map);
+							playerlife--;
+							music.mu_Dead_Player();
+						}
 					}
 				}
 			}
@@ -372,33 +380,39 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], t
 			}
 			else
 			{
-				if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx == aimx + 1 && player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy + 1 == aimy)))
+				if (!player_tank1.count_sheld)
 				{
-					if (player_tank1.level == 2)
+					if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx == aimx + 1 && player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy + 1 == aimy)))
 					{
-						player_tank1.level--;
-						music.mu_Hit_Tank();
-					}
-					else
-					{
-						player_tank1.init_tank_player(bornQueue, map);
-						playerlife--;
-						music.mu_Dead_Player();
+						if (player_tank1.level == 2)
+						{
+							player_tank1.level--;
+							music.mu_Hit_Tank();
+						}
+						else
+						{
+							player_tank1.init_tank_player(bornQueue, map);
+							playerlife--;
+							music.mu_Dead_Player();
+						}
 					}
 				}
 
-				if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx == aimx + 1 && player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy + 1 == aimy)))
+				if (!player_tank2.count_sheld)
 				{
-					if (player_tank2.level == 2)
+					if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx == aimx + 1 && player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy + 1 == aimy)))
 					{
-						player_tank2.level--;
-						music.mu_Hit_Tank();
-					}
-					else
-					{
-						player_tank2.init_tank_player(bornQueue, map, Up, false);
-						playerlife--;
-						music.mu_Dead_Player();
+						if (player_tank2.level == 2)
+						{
+							player_tank2.level--;
+							music.mu_Hit_Tank();
+						}
+						else
+						{
+							player_tank2.init_tank_player(bornQueue, map, Up, false);
+							playerlife--;
+							music.mu_Dead_Player();
+						}
 					}
 				}
 			}
@@ -448,33 +462,39 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], t
 			}
 			else
 			{
-				if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy + 1)))
+				if (!player_tank1.count_sheld)
 				{
-					if (player_tank1.level == 2)
+					if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy + 1)))
 					{
-						player_tank1.level--;
-						music.mu_Hit_Tank();
-					}
-					else
-					{
-						player_tank1.init_tank_player(bornQueue, map);
-						playerlife--;
-						music.mu_Dead_Player();
+						if (player_tank1.level == 2)
+						{
+							player_tank1.level--;
+							music.mu_Hit_Tank();
+						}
+						else
+						{
+							player_tank1.init_tank_player(bornQueue, map);
+							playerlife--;
+							music.mu_Dead_Player();
+						}
 					}
 				}
 
-				if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy + 1)))
+				if (!player_tank2.count_sheld)
 				{
-					if (player_tank2.level == 2)
+					if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy + 1)))
 					{
-						player_tank2.level--;
-						music.mu_Hit_Tank();
-					}
-					else
-					{
-						player_tank2.init_tank_player(bornQueue, map, Up, false);
-						playerlife--;
-						music.mu_Dead_Player();
+						if (player_tank2.level == 2)
+						{
+							player_tank2.level--;
+							music.mu_Hit_Tank();
+						}
+						else
+						{
+							player_tank2.init_tank_player(bornQueue, map, Up, false);
+							playerlife--;
+							music.mu_Dead_Player();
+						}
 					}
 				}
 			}
@@ -494,33 +514,39 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], t
 		if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 		{
 
-
-			if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx == aimx + 1 && player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy + 1 == aimy)))
+			if (!player_tank1.count_sheld)
 			{
-				if (player_tank1.level == 2)
+				if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy == aimy) || (player_tank1.aimx == aimx + 1 && player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx + 1 && player_tank1.aimy + 1 == aimy)))
 				{
-					player_tank1.level--;
-					music.mu_Hit_Tank();
-				}
-				else
-				{
-					player_tank1.init_tank_player(bornQueue, map, Right);
-					playerlife[0]--;
-					music.mu_Dead_Player();
+					if (player_tank1.level == 2)
+					{
+						player_tank1.level--;
+						music.mu_Hit_Tank();
+					}
+					else
+					{
+						player_tank1.init_tank_player(bornQueue, map, Right);
+						playerlife[0]--;
+						music.mu_Dead_Player();
+					}
 				}
 			}
-			if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx == aimx + 1 && player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy + 1 == aimy)))
+
+			if (!player_tank2.count_sheld)
 			{
-				if (player_tank2.level == 2)
+				if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy == aimy) || (player_tank2.aimx == aimx + 1 && player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx + 1 && player_tank2.aimy + 1 == aimy)))
 				{
-					player_tank2.level--;
-					music.mu_Hit_Tank();
-				}
-				else
-				{
-					player_tank2.init_tank_player(bornQueue, map, Left, false);
-					playerlife[1]--;
-					music.mu_Dead_Player();
+					if (player_tank2.level == 2)
+					{
+						player_tank2.level--;
+						music.mu_Hit_Tank();
+					}
+					else
+					{
+						player_tank2.init_tank_player(bornQueue, map, Left, false);
+						playerlife[1]--;
+						music.mu_Dead_Player();
+					}
 				}
 			}
 		}
@@ -529,36 +555,41 @@ void bulltes::BulletHitPlus(map & map, int(*tankmap)[26], int(*bulletmap)[26], t
 	case Right:
 		if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 		{
-
-			if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy + 1)))
+			if (!player_tank1.count_sheld)
 			{
-				if (player_tank1.level == 2)
+				if (((player_tank1.aimx == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy)) || ((player_tank1.aimx == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy == aimy + 1) || (player_tank1.aimx == aimx&&player_tank1.aimy + 1 == aimy + 1) || (player_tank1.aimx + 1 == aimx&&player_tank1.aimy + 1 == aimy + 1)))
 				{
-					player_tank1.level--;
-					music.mu_Hit_Tank();
-				}
-				else
-				{
-					player_tank1.init_tank_player(bornQueue, map, Right);
-					playerlife[0]--;
-					music.mu_Dead_Player();
-				}
-			}
-			if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy + 1)))
-			{
-				if (player_tank2.level == 2)
-				{
-					player_tank2.level--;
-					music.mu_Hit_Tank();
-				}
-				else
-				{
-					player_tank2.init_tank_player(bornQueue, map, Left, false);
-					playerlife[1]--;
-					music.mu_Dead_Player();
+					if (player_tank1.level == 2)
+					{
+						player_tank1.level--;
+						music.mu_Hit_Tank();
+					}
+					else
+					{
+						player_tank1.init_tank_player(bornQueue, map, Right);
+						playerlife[0]--;
+						music.mu_Dead_Player();
+					}
 				}
 			}
 
+			if (!player_tank2.count_sheld)
+			{
+				if (((player_tank2.aimx == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy)) || ((player_tank2.aimx == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy == aimy + 1) || (player_tank2.aimx == aimx&&player_tank2.aimy + 1 == aimy + 1) || (player_tank2.aimx + 1 == aimx&&player_tank2.aimy + 1 == aimy + 1)))
+				{
+					if (player_tank2.level == 2)
+					{
+						player_tank2.level--;
+						music.mu_Hit_Tank();
+					}
+					else
+					{
+						player_tank2.init_tank_player(bornQueue, map, Left, false);
+						playerlife[1]--;
+						music.mu_Dead_Player();
+					}
+				}
+			}
 		}
 		break;
 	default:
@@ -782,34 +813,31 @@ void bulltes::BulletHit_bullte(map & map, int(*tankmap)[26], int(*bulletmap)[26]
 	case Down:
 		if (bulletmap[aimx][aimy] == 1 || bulletmap[aimx + 1][aimy] == 1)
 		{
-			
-
-				if ((player_tank1.bullte.aimx == aimx&&player_tank1.bullte.aimy == aimy) || (player_tank1.bullte.aimx + 1 == aimx&&player_tank1.bullte.aimy == aimy))
-				{
-					player_tank1.bullte.bullet = false;
-				}
-				if ((player_tank1.bullte.aimx == aimx&&player_tank2.bullte.aimy == aimy) || (player_tank2.bullte.aimx + 1 == aimx&&player_tank2.bullte.aimy == aimy))
-				{
-					player_tank2.bullte.bullet = false;
-				}
-			
+			if ((player_tank1.bullte.aimx == aimx&&player_tank1.bullte.aimy == aimy) || (player_tank1.bullte.aimx + 1 == aimx&&player_tank1.bullte.aimy == aimy))
+			{
+				player_tank1.bullte.bullet = false;
+			}
+			if ((player_tank1.bullte.aimx == aimx&&player_tank2.bullte.aimy == aimy) || (player_tank2.bullte.aimx + 1 == aimx&&player_tank2.bullte.aimy == aimy))
+			{
+				player_tank2.bullte.bullet = false;
+			}
 		}
 		break;
 	case Left:
 	case Right:
 		if (bulletmap[aimx][aimy] == 1 || bulletmap[aimx][aimy + 1] == 1)
 		{
-			
 
-				if ((player_tank1.bullte.aimx == aimx&&player_tank1.bullte.aimy == aimy) || (player_tank1.bullte.aimx == aimx&&player_tank1.bullte.aimy + 1 == aimy))
-				{
-					player_tank1.bullte.bullet = false;
-				}
-				if ((player_tank2.bullte.aimx == aimx&&player_tank2.bullte.aimy == aimy) || (player_tank2.bullte.aimx == aimx&&player_tank2.bullte.aimy + 1 == aimy))
-				{
-					player_tank2.bullte.bullet = false;
-				}
-			
+
+			if ((player_tank1.bullte.aimx == aimx&&player_tank1.bullte.aimy == aimy) || (player_tank1.bullte.aimx == aimx&&player_tank1.bullte.aimy + 1 == aimy))
+			{
+				player_tank1.bullte.bullet = false;
+			}
+			if ((player_tank2.bullte.aimx == aimx&&player_tank2.bullte.aimy == aimy) || (player_tank2.bullte.aimx == aimx&&player_tank2.bullte.aimy + 1 == aimy))
+			{
+				player_tank2.bullte.bullet = false;
+			}
+
 		}
 		break;
 	default:
@@ -823,7 +851,7 @@ bool bulltes::Canfire()
 }
 
 
-bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
 	if (bullet&&count == 0)
 	{
@@ -867,7 +895,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -908,7 +936,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx + 1][aimy] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -949,7 +977,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -989,7 +1017,7 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_pl
 			if (tankmap[aimx][aimy] == 1 || tankmap[aimx][aimy + 1] == 1)
 			{
 				bombQueue.push(x - 10, y - 10);
-				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
+				BulletHitPlus(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score);
 				bullet = false;
 			}
 
@@ -1371,9 +1399,9 @@ bool bulltes::Canmove(map & map, int(*tankmap)[26], int(*bulletmap)[26], tank_pl
 	return false;
 }
 
-void bulltes::update_move(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
+void bulltes::update_move(map & map, int(*tankmap)[26], int(*bulltemap)[26], tank_player& player_tank, queue<tanke_enemy*>& enemyQueue, queue<tanke_enemy*>& deadenemyQueue, queue<prop*>& propertyQueue, myQueue & bombQueue, myQueue & bornQueue, gameState & state, int& playerlife, int& enemynum, int& score)
 {
-	if (bullet&&Canmove(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score))
+	if (bullet&&Canmove(map, tankmap, bulltemap, player_tank, enemyQueue, deadenemyQueue, propertyQueue, bombQueue, bornQueue, state, playerlife, enemynum, score))
 		switch (direct)
 		{
 		case Up:
@@ -1456,5 +1484,61 @@ void bulltes::update_xy()
 	else
 	{
 		count = 20 / speed;
+	}
+}
+
+void bulltes::creatProp(int x, int y, queue<prop*>& propertyQueue)
+{
+	int n = myrand_int(0, 500);
+	if (0 < n&&n < 100)
+	{
+		music.mu_Prop_Appear();
+		prop *p;
+
+		if (n > 0 && n < 20)
+		{
+			p = new prop;
+			p->pro = tank;
+			p->time = 500;
+			p->x = aimx;
+			p->y = aimy;
+			propertyQueue.push(p);
+		}
+		else if (n > 20 && n < 40)
+		{
+			p = new prop;
+			p->pro = bomb;
+			p->time = 500;
+			p->x = aimx;
+			p->y = aimy;
+			propertyQueue.push(p);
+		}
+		else if (n > 40 && n < 60)
+		{
+			p = new prop;
+			p->pro = star;
+			p->time = 500;
+			p->x = aimx;
+			p->y = aimy;
+			propertyQueue.push(p);
+		}
+		else if (n > 60 && n < 80)
+		{
+			p = new prop;
+			p->pro = timer;
+			p->time = 500;
+			p->x = aimx;
+			p->y = aimy;
+			propertyQueue.push(p);
+		}
+		else if (n > 80 && n < 100)
+		{
+			p = new prop;
+			p->pro = sheld;
+			p->time = 500;
+			p->x = aimx;
+			p->y = aimy;
+			propertyQueue.push(p);
+		}
 	}
 }

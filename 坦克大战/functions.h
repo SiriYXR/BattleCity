@@ -66,10 +66,27 @@ enum gameState
 	pass
 };
 
+enum property
+{
+	tank,
+	bomb,
+	star,
+	timer,
+	sheld
+};
+
 struct point
 {
 	int x;
 	int y;
+};
+
+struct prop
+{
+	property pro;
+	int x;
+	int y;
+	int time;
 };
 
 struct mapdata;

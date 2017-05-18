@@ -21,6 +21,7 @@ private:
 	void update_tankmap();
 	void update_bulltemap();
 	void update_state();
+	void update_proptime();
 
 	void onKey_J(key_msg key);
 	void onKey_WASD(key_msg key);
@@ -32,6 +33,7 @@ private:
 	void rend_bar(int x, int y, int w, int h, int n = 4, color_t color = WHITE);
 	void rend_bomb();
 	void rend_born();
+	void rend_prop();
 	void rend_lose();
 	void rend_pass();
 	void rend_pause();
@@ -46,6 +48,14 @@ private:
 	void initbulltemap();
 
 	void delete_enemy();
+	void delete_property();
+
+	void getProp(tank_player& tank_player);
+	void prop_tank(tank_player& tank_player);
+	void prop_star(tank_player& tank_player);
+	void prop_bomb(tank_player& tank_player);
+	void prop_sheld(tank_player& tank_player);
+	void prop_timer(tank_player& tank_player);
 
 	bool canmove(int aimx, int aimy, key_msg key);
 	bool enemycanBorn();
@@ -59,6 +69,8 @@ private:
 	myQueue bornQueue;
 	queue<tanke_enemy*> enemyQueue;
 	queue<tanke_enemy*> deadenemyQueue;
+	queue<prop*> propertyQueue;
+	queue<prop*> propertyusedQueue;
 
 	gameState state;
 
@@ -73,6 +85,7 @@ private:
 	int historyscore;
 	int enemynum;
 	int count_pass;
+	int count_enemypause;
 };
 
 bool Escloop(gameScene_PVE& gs);

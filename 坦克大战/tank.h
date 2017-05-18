@@ -19,5 +19,6 @@ public:
 	int aimx;
 	int aimy;
 	int count;
-	float speed;
+	int speed;
+	int count_sheld;
 };

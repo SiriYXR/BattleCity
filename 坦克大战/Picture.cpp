@@ -17,11 +17,11 @@ Picture::Picture()
 
 	//道具
 	//-----------------------------
-	getimage(bomb, "资源包\\图片\\道具\\bomb.png");
-	getimage(life, "资源包\\图片\\道具\\life.png");
-	getimage(shield, "资源包\\图片\\道具\\shield.png");
-	getimage(star, "资源包\\图片\\道具\\star.png");
-	getimage(timer, "资源包\\图片\\道具\\timer.png");
+	getimage(bomb, "资源包\\图片\\道具\\bomb.jpg");
+	getimage(life, "资源包\\图片\\道具\\life.jpg");
+	getimage(shield, "资源包\\图片\\道具\\shield.jpg");
+	getimage(star, "资源包\\图片\\道具\\star.jpg");
+	getimage(timer, "资源包\\图片\\道具\\timer.jpg");
 
 	//地图
 	//-----------------------------

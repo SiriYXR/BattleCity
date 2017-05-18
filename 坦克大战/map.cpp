@@ -17,7 +17,6 @@ map::map()
 	member->gamemode = PVE;
 }
 
-
 void map::init(mode mode)
 {
 	delete member;
